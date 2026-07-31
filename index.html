@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-width=1.0">
+    <title>Smart-Agro System</title>
+    <link rel="stylesheet" href="css.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+</head>
+<body>
+
+    <div class="bg-animation"></div>
+
+    <div id="lossAlertBanner" class="loss-banner hidden">
+        <marquee behavior="scroll" direction="left" id="lossAlertText">
+            ⚠️ WARNING: The following animals are operating at a LOSS (After 4+ Days Analysis): 
+        </marquee>
+    </div>
+
+    <nav id="navbar" class="hidden">
+        <h2 class="logo">
+    Smart-Agro <span>Livestock Management System</span>
+</h2>
+        <div class="nav-links">
+            <button onclick="switchView('dashboard-view')">Dashboard</button>
+            <button onclick="switchView('daily-update-view')">Daily Update</button>
+            <button onclick="switchView('animals-view')">Animals</button>
+            <button onclick="switchView('analyzer-view')">Analyzer</button>
+            <button onclick="switchView('sell-animal-view')">Sell</button>
+            <button onclick="switchView('easy-access-view')">QR Access</button>
+            <button onclick="switchView('settings-view')">⚙️ Settings</button>
+            <button onclick="logout()" class="logout-btn">Log Out</button>
+        </div>
+    </nav>
+
+    <div id="login-view" class="view-section active animate-fade">
+        <div class="login-box glass-effect">
+            <h2 style="text-align: center; margin-bottom: 20px;">Smart-Agro Login</h2>
+            <form id="loginForm">
+                <div class="form-group">
+                    <label>Email / Username:</label>
+                    <input type="text" placeholder="admin" required>
+                </div>
+                <div class="form-group">
+                    <label>Password:</label>
+                    <input type="password" placeholder="***" required>
+                </div>
+                <button type="submit">Log In</button>
+            </form>
+        </div>
+    </div>
+
+    <div id="dashboard-view" class="view-section hidden animate-fade container">
+        <div class="dashboard-header">
+            <h2 style="color: white; text-shadow: 1px 1px 2px #000;">My Dashboard</h2>
+            <div class="search-box">
+                <input type="text" id="dashboardSearchId" placeholder="Search Animal by ID...">
+                <button onclick="searchAnimalOnDashboard()">Search</button>
+            </div>
+        </div>
+
+        <div id="vaccineAlertBox" class="alert-box hidden"></div>
+
+        <div class="cards">
+            <div class="card glass-effect">
+                <h3>Total Active Animals</h3>
+                <p id="totalAnimals">0</p>
+            </div>
+            <div class="card glass-effect">
+                <h3>Pending Vaccines</h3>
+                <p id="pendingVaccines" class="warning-text">0</p>
+            </div>
+            <div class="card glass-effect">
+                <h3>Operating Profit (Milk)</h3>
+                <p id="totalProfit">0</p>
+                <small>Excludes Buying Price</small>
+            </div>
+        </div>
+
+        <div class="action-bar">
+            <button class="add-btn" onclick="switchView('add-data-view')">+ Add New Data</button>
+            <button class="edit-btn" onclick="switchView('edit-data-view')">✎ Edit Data</button>
+        </div>
+
+        <div class="main-content">
+            <div class="section glass-effect">
+                <h2>Operating Expense vs Income</h2>
+                <canvas id="profitChart"></canvas>
+            </div>
+            <div class="section glass-effect">
+                <h2>Production Trend Analytics</h2>
+                <canvas id="productionChart"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <div id="add-data-view" class="view-section hidden animate-fade container">
+        <button class="back-btn" onclick="switchView('dashboard-view')">← Back to Dashboard</button>
+        <div class="section glass-effect" style="margin-top: 20px;">
+            <h2>Register New Animal</h2>
+            <form id="animalForm">
+                <div class="form-group">
+                    <label>Animal ID / Tag:</label>
+                    <input type="text" id="animalId" placeholder="e.g., COW-101" required>
+                </div>
+                <div class="form-group">
+                    <label>Purchase Price (BDT):</label>
+                    <input type="number" id="buyPrice" required>
+                </div>
+                <div class="form-group">
+                    <label>Birth Date:</label>
+                    <input type="date" id="birthDate" required>
+                </div>
+                <div class="form-group">
+                    <label>Last Vaccination Date:</label>
+                    <input type="date" id="lastVaccine" required>
+                </div>
+                <div class="form-group">
+                    <label>Next Vaccination Date:</label>
+                    <input type="date" id="nextVaccine" required>
+                </div>
+                <button type="submit">Register Animal</button>
+            </form>
+        </div>
+    </div>
+
+    <div id="edit-data-view" class="view-section hidden animate-fade container">
+        <button class="back-btn" onclick="switchView('dashboard-view')">← Back to Dashboard</button>
+        <div class="section glass-effect" style="margin-top: 20px;">
+            <h2>Edit All Animal Data</h2>
+            <div class="search-box" style="margin-bottom: 20px;">
+                <input type="text" id="editSearchId" placeholder="Enter Animal ID to edit...">
+                <button onclick="searchToEdit()">Search</button>
+            </div>
+
+            <div id="editFormSection" class="hidden">
+                <form id="updateProfileForm">
+                    <input type="hidden" id="editId">
+                    <div class="form-group">
+                        <label>Purchase Price (BDT):</label>
+                        <input type="number" id="editBuyPrice" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Birth Date:</label>
+                        <input type="date" id="editBirthDate" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Last Vaccination Date:</label>
+                        <input type="date" id="editLastVaccine" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Next Vaccination Date:</label>
+                        <input type="date" id="editNextVaccine" required>
+                    </div>
+                    <button type="button" onclick="saveProfileUpdate()" style="background-color: #2980b9;">Save Changes</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div id="daily-update-view" class="view-section hidden animate-fade container">
+        <div class="section glass-effect">
+            <h2>Daily Data Update</h2>
+            <p>Update daily milk production and expenses by ID (Active Animals Only).</p>
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Animal ID</th>
+                        <th>Status (After 4 Logs)</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody id="dailyUpdateTableBody"></tbody>
+            </table>
+
+            <div id="dailyLogUpdateSection" class="hidden" style="margin-top: 30px; border-top: 2px solid #ccc; padding-top: 20px;">
+                <h3 id="updateAnimalHeader">Add Daily Record</h3>
+                <form id="dailyLogForm">
+                    <input type="hidden" id="logAnimalId">
+                    <div class="form-group">
+                        <label>Record Date:</label>
+                        <input type="date" id="logDate" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Milk Produced Today (Liters):</label>
+                        <input type="number" id="logMilk" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Sold Price per Liter (BDT):</label>
+                        <input type="number" id="logPrice" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Daily Expenses (Food/Meds in BDT):</label>
+                        <input type="number" id="logExpense" required>
+                    </div>
+                    <button type="submit">Save Daily Log</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div id="sell-animal-view" class="view-section hidden animate-fade container">
+        <div class="section glass-effect">
+            <h2>Sell Animal & Final Calculation</h2>
+            <form id="sellForm" style="max-width: 500px; margin: auto;">
+                <div class="form-group">
+                    <label>Animal ID:</label>
+                    <input type="text" id="sellAnimalId" required>
+                </div>
+                <div class="form-group">
+                    <label>Selling Price (BDT):</label>
+                    <input type="number" id="sellPrice" required>
+                </div>
+                <button type="submit" style="background-color: #8e44ad;">Confirm Sale & Calculate</button>
+            </form>
+            <div id="sellResult" class="alert-box hidden" style="margin-top: 20px;"></div>
+        </div>
+    </div>
+
+    <div id="animals-view" class="view-section hidden animate-fade container">
+        <div class="section glass-effect">
+            <h2>All Animals Overview</h2>
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>State</th>
+                        <th>Milk Logs</th>
+                        <th>Op. Profit (Milk)</th>
+                        <th>Final Life Profit</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody id="animalTableBody"></tbody>
+            </table>
+        </div>
+    </div>
+
+    <div id="analyzer-view" class="view-section hidden animate-fade container">
+        <div class="section glass-effect">
+            <h2>Monthly Financial Analyzer (Operating Profit)</h2>
+            <canvas id="monthlyChart"></canvas>
+        </div>
+    </div>
+
+    <div id="easy-access-view" class="view-section hidden animate-fade container">
+        <div class="section glass-effect" style="text-align: center;">
+            <h2>QR Generator</h2>
+            <div class="search-box" style="justify-content: center; margin: 20px 0;">
+                <input type="text" id="qrSearchId" placeholder="Enter Animal ID...">
+                <button onclick="generateQR()">Generate QR</button>
+            </div>
+            <div id="qrResult" class="hidden">
+                <div id="qrcode" style="display: flex; justify-content: center; margin: 20px 0;"></div>
+            </div>
+        </div>
+    </div>
+
+    <div id="settings-view" class="view-section hidden animate-fade container">
+        <div class="section glass-effect" style="text-align: center;">
+            <h2 style="color: #c0392b;">System Settings & Data Management</h2>
+            <p>Welcome to the admin danger zone. Actions performed here cannot be undone.</p>
+            
+            <div style="margin-top: 40px; padding: 20px; border: 2px dashed #e74c3c; border-radius: 10px; background-color: #fadbd8;">
+                <h3 style="color: #c0392b;">Delete All Farm Data</h3>
+                <p>This will erase every animal, every log, and every setting from the system forever.</p>
+                <button onclick="deleteAllSystemData()" style="background-color: #c0392b; width: auto; padding: 15px 30px; font-size: 1.1rem;">🗑️ Delete ALL System Data</button>
+            </div>
+        </div>
+    </div>
+
+    <footer id="appFooter" class="hidden">
+        <p>Developed by Nur Hossain Rhedoy</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
