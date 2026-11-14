@@ -1,0 +1,10 @@
+{
+  "users": [
+    {
+      "username": "Rhedoy",
+      "password": "$2b$10$adAXrKoizEeBUUvQY1U5dOe8pmFZsEEhFqM1gbUwpQXe1fNl76Bv6",
+      "recoveryHash": "$2b$10$dAiDOMtFMhsi/WMZGmUCOuVKj50wxyaoOlB1rFRvJuq/Vtd7BnvqG"
+    }
+  ],
+  "animals": []
+}
