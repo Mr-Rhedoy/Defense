@@ -1,0 +1,1817 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title data-i18n="appTitle">Smart-Agro System</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <meta name="theme-color" content="#123524">
+    <link rel="stylesheet" href="css.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+</head>
+<body class="smart-agro-app">
+
+    <div class="bg-animation"></div>
+
+    <div id="lossAlertBanner" class="loss-banner hidden">
+        <marquee behavior="scroll" direction="left" id="lossAlertText"></marquee>
+    </div>
+
+    <!-- SMART-AGRO NAVIGATION: sidebar on Dashboard, compact top nav elsewhere -->
+    <nav id="navbar" class="hidden app-sidebar" aria-label="Main navigation">
+        <h2 class="logo">🐄 Smart-Agro <span data-i18n="logoSub">Livestock Management System</span></h2>
+        <div class="sidebar-label">WORKSPACE</div>
+        <div class="nav-links">
+            <button type="button" data-view="dashboard-view" onclick="switchView('dashboard-view')">📊 <span data-i18n="navDashboard">Dashboard</span></button>
+            <button type="button" data-view="daily-update-view" onclick="switchView('daily-update-view')">📝 <span data-i18n="navDaily">Daily Update</span></button>
+            <button type="button" data-view="animals-view" onclick="switchView('animals-view')">🐄 <span data-i18n="navAnimals">Animals</span></button>
+            <button type="button" data-view="analyzer-view" onclick="switchView('analyzer-view')">📈 <span data-i18n="navAnalyzer">Analyzer</span></button>
+            <button type="button" data-view="sell-animal-view" onclick="switchView('sell-animal-view')">💰 <span data-i18n="navSell">Sell</span></button>
+            <button type="button" data-view="easy-access-view" onclick="switchView('easy-access-view')">📱 <span data-i18n="navQR">QR Access</span></button>
+            <button type="button" onclick="window.location.href='subscription.html'">💳 <span>Subscription</span></button>
+            <button type="button" onclick="toggleAIChat()">🤖 <span data-i18n="navAI">AI Assistant</span></button>
+            <button type="button" class="nav-profile-btn" data-view="profile-view" onclick="switchView('profile-view')">👤 <span data-i18n="navProfile">Profile</span></button>
+            <button type="button" data-view="settings-view" onclick="switchView('settings-view')">⚙️ <span>Settings</span></button>
+            <div class="sidebar-divider" aria-hidden="true"></div>
+            <button type="button" onclick="toggleTheme()" id="themeBtn" title="Toggle Theme">🌙 <span>Theme</span></button>
+            <button type="button" onclick="toggleLanguage()" id="langBtn" class="lang-pill">বাংলা</button>
+            <button type="button" onclick="logout()" class="logout-btn"><span aria-hidden="true">↪</span> <span data-i18n="navLogout">Log Out</span></button>
+        </div>
+        <div class="sidebar-bottom">
+            <div class="sidebar-ai-card">
+                <span class="sidebar-ai-icon">🤖</span>
+                <strong>Smart-Agro AI</strong>
+                <p>Your farm assistant for records, milk production and vaccination schedules.</p>
+                <button type="button" onclick="toggleAIChat()">Ask AI Assistant →</button>
+            </div>
+            <div class="sidebar-version"><span class="sidebar-online-dot"></span> Smart-Agro <small>Livestock Management Platform</small></div>
+        </div>
+    </nav>
+
+    <!-- LOGIN, SIGNUP, EMAIL VERIFICATION AND PASSWORD RESET -->
+
+<div id="login-view" class="view-section animate-fade">
+
+    <div class="login-shell">
+
+        <!-- LEFT SIDE: FARM SHOWCASE -->
+
+        <section class="login-showcase">
+
+            <div class="showcase-glow showcase-glow-one"></div>
+            <div class="showcase-glow showcase-glow-two"></div>
+
+            <div class="showcase-topline">
+
+<button
+    type="button"
+    class="login-motion-toggle"
+    onclick="
+        document.body.classList.toggle('login-motion-paused');
+        this.textContent =
+            document.body.classList.contains('login-motion-paused')
+                ? '▶ Play motion'
+                : 'Ⅱ Pause motion';
+    ">
+    Ⅱ Pause motion
+</button>
+
+                <span class="showcase-brand-icon">🌿</span>
+
+                <span class="showcase-brand-text">
+                    SMART-AGRO
+                    <small>INTELLIGENT FARM MANAGEMENT</small>
+                </span>
+
+                <span class="showcase-live-pill">
+                    <i></i> FARM TECHNOLOGY
+                </span>
+            </div>
+
+
+            <div class="showcase-copy">
+
+                <span class="showcase-eyebrow">
+                    THE FUTURE OF FARMING
+                </span>
+
+                <h1>
+                    Grow Smarter.<br>
+                    <span>Farm Better.</span>
+                </h1>
+
+                <p>
+                    Manage your livestock, monitor farm performance
+                    and make smarter decisions — all in one place.
+                </p>
+
+            </div>
+
+
+            <!-- FARM LANDSCAPE ILLUSTRATION -->
+
+            <div class="showcase-landscape">
+
+                <div class="farm-sun"></div>
+
+                <div class="farm-cloud cloud-one"></div>
+                <div class="farm-cloud cloud-two"></div>
+
+                <div class="farm-hill hill-back"></div>
+                <div class="farm-hill hill-front"></div>
+
+                <div class="farm-field-lines"></div>
+
+                <div class="farm-tree tree-one">🌳</div>
+                <div class="farm-tree tree-two">🌲</div>
+                <div class="farm-cow">🐄</div>
+
+                <div class="farm-leaf leaf-one">🍃</div>
+                <div class="farm-leaf leaf-two">🍃</div>
+                <div class="farm-leaf leaf-three">🌿</div>
+
+            </div>
+
+
+            <!-- FLOATING ACTIVITY CARD 1 -->
+
+            <div class="showcase-activity-card activity-production">
+
+                <div class="activity-card-icon production-icon">
+                    🥛
+                </div>
+
+                <div class="activity-card-copy">
+                    <small>DAIRY MANAGEMENT</small>
+                    <strong>Milk Production</strong>
+                    <span>Track your daily records</span>
+                </div>
+
+                <div class="activity-card-status">
+                    <span></span>
+                </div>
+
+            </div>
+
+
+            <!-- FLOATING ACTIVITY CARD 2 -->
+
+            <div class="showcase-activity-card activity-health">
+
+                <div class="activity-card-icon health-icon">
+                    💉
+                </div>
+
+                <div class="activity-card-copy">
+                    <small>ANIMAL HEALTH</small>
+                    <strong>Vaccination Care</strong>
+                    <span>Stay on schedule</span>
+                </div>
+
+                <div class="activity-card-status">
+                    <span></span>
+                </div>
+
+            </div>
+
+
+            <!-- BOTTOM FEATURES -->
+
+            <div class="showcase-feature-row">
+
+                <div>
+                    <span>🐄</span>
+                    <strong>Livestock</strong>
+                </div>
+
+                <div>
+                    <span>📊</span>
+                    <strong>Analytics</strong>
+                </div>
+
+                <div>
+                    <span>🤖</span>
+                    <strong>Smart AI</strong>
+                </div>
+
+            </div>
+
+
+            <div class="showcase-footer">
+                <span>✦</span>
+                SMARTER FARMING STARTS HERE
+            </div>
+
+        </section>
+
+
+        <!-- RIGHT SIDE: LOGIN CARD -->
+
+        <section class="login-box glass-effect">
+
+            <div class="login-card-header">
+
+                <div class="login-brand-mark">
+                    <span>🌱</span>
+                </div>
+
+                <span class="login-card-eyebrow">
+                    WELCOME TO SMART-AGRO
+                </span>
+
+                <h2 id="authTitle" data-i18n="loginTitle">
+                    Smart-Agro Login
+                </h2>
+
+                <p class="login-intro">
+                    Sign in to access your farm workspace.
+                </p>
+
+            </div>
+
+
+            <!-- LOGIN FORM -->
+
+            <form id="loginForm">
+
+                <div class="form-group">
+
+                    <label for="loginRole">
+                        Login as:
+                    </label>
+
+                    <select id="loginRole" required>
+                        <option value="user">User</option>
+                        <option value="admin">Admin</option>
+                    </select>
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="loginUser" data-i18n="labelIdentifier">
+                        Username or Gmail address:
+                    </label>
+
+                    <input
+                        type="text"
+                        id="loginUser"
+                        autocomplete="username"
+                        placeholder="Username or name@gmail.com"
+                        required>
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="loginPass" data-i18n="labelPass">
+                        Password:
+                    </label>
+
+                    <input
+                        type="password"
+                        id="loginPass"
+                        autocomplete="current-password"
+                        required>
+
+                </div>
+
+
+                <button type="submit" data-i18n="btnLogin">
+                    Log In
+                </button>
+
+            </form>
+
+
+            <!-- SIGNUP FORM -->
+
+            <form id="signupForm" class="hidden">
+
+                <div class="form-group">
+
+                    <label for="signupUser" data-i18n="labelChooseUser">
+                        Choose Username:
+                    </label>
+
+                    <input
+                        type="text"
+                        id="signupUser"
+                        minlength="3"
+                        maxlength="40"
+                        autocomplete="username"
+                        required>
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="signupEmail" data-i18n="labelGmail">
+                        Gmail address:
+                    </label>
+
+                    <input
+                        type="email"
+                        id="signupEmail"
+                        autocomplete="email"
+                        placeholder="name@gmail.com"
+                        required>
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="signupPass" data-i18n="labelChoosePass">
+                        Choose Password (8+ characters):
+                    </label>
+
+                    <input
+                        type="password"
+                        id="signupPass"
+                        minlength="8"
+                        autocomplete="new-password"
+                        required>
+
+                </div>
+
+
+                <button type="submit" data-i18n="btnCreate">
+                    Create Account
+                </button>
+
+            </form>
+
+
+            <!-- EMAIL VERIFICATION -->
+
+            <form id="verifyForm" class="hidden">
+
+                <p data-i18n="verifyHint">
+                    Enter the 6-digit code sent to your Gmail address.
+                </p>
+
+                <div class="form-group">
+
+                    <label for="verifyEmail" data-i18n="labelGmail">
+                        Gmail address:
+                    </label>
+
+                    <input
+                        type="email"
+                        id="verifyEmail"
+                        autocomplete="email"
+                        required>
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="verifyCode" data-i18n="labelOtp">
+                        Email verification code:
+                    </label>
+
+                    <input
+                        type="text"
+                        id="verifyCode"
+                        inputmode="numeric"
+                        maxlength="6"
+                        pattern="[0-9]{6}"
+                        required>
+
+                </div>
+
+
+                <button type="submit" data-i18n="btnVerify">
+                    Verify email
+                </button>
+
+                <button
+                    type="button"
+                    id="resendVerificationBtn"
+                    class="back-btn"
+                    data-i18n="btnResend">
+                    Resend code
+                </button>
+
+                <p id="verifyMessage" class="hint" aria-live="polite"></p>
+
+            </form>
+
+
+            <!-- FORGOT PASSWORD -->
+
+            <div id="forgotForm" class="hidden">
+
+                <form id="forgotRequestForm">
+
+                    <div class="form-group">
+
+                        <label for="forgotEmail" data-i18n="labelGmail">
+                            Gmail address:
+                        </label>
+
+                        <input
+                            type="email"
+                            id="forgotEmail"
+                            autocomplete="email"
+                            required>
+
+                    </div>
+
+                    <button type="submit" data-i18n="btnSendOtp">
+                        Send password reset code
+                    </button>
+
+                </form>
+
+
+                <form id="forgotResetForm" class="hidden">
+
+                    <div class="form-group">
+
+                        <label for="forgotResetEmail" data-i18n="labelGmail">
+                            Gmail address:
+                        </label>
+
+                        <input
+                            type="email"
+                            id="forgotResetEmail"
+                            readonly
+                            required>
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="forgotCode" data-i18n="labelOtp">
+                            6-digit OTP:
+                        </label>
+
+                        <input
+                            type="text"
+                            id="forgotCode"
+                            inputmode="numeric"
+                            maxlength="6"
+                            pattern="[0-9]{6}"
+                            required>
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="forgotPass" data-i18n="labelNewPass">
+                            New Password (8+ characters):
+                        </label>
+
+                        <input
+                            type="password"
+                            id="forgotPass"
+                            minlength="8"
+                            autocomplete="new-password"
+                            required>
+
+                    </div>
+
+
+                    <button type="submit" data-i18n="btnReset">
+                        Reset Password
+                    </button>
+
+                </form>
+
+                <p id="forgotMessage" class="hint" aria-live="polite"></p>
+
+            </div>
+
+
+            <!-- AUTH LINKS -->
+
+            <p id="authLinks" class="auth-links"></p>
+
+
+            <div class="login-security-note">
+                <span>🔒</span>
+                Secure access to your farm workspace
+            </div>
+
+        </section>
+
+    </div>
+
+</div>
+
+
+    <!-- SMART-AGRO PREMIUM USER DASHBOARD -->
+    <div id="dashboard-view" class="view-section hidden animate-fade container user-dashboard">
+        <div class="dashboard-layout">
+            <header class="dashboard-header user-dashboard-header">
+                <div class="dashboard-heading-copy">
+                    <span class="dashboard-eyebrow" data-i18n="dashboardEyebrow">YOUR FARM WORKSPACE</span>
+                    <h2><span data-i18n="welcomeBack">Welcome back,</span> <strong id="dashboardProfileName">Farmer</strong> <span class="welcome-wave" aria-hidden="true">👋</span></h2>
+                    <p data-i18n="dashboardSubline">Here's what's happening on your farm today.</p>
+                </div>
+                <div class="dashboard-header-tools">
+                    <div class="search-box dashboard-search-box">
+                        <input type="text" id="dashboardSearchId" data-i18n-placeholder="searchPlaceholder" placeholder="Search Animal by ID..." aria-label="Search animal by ID">
+                        <button type="button" onclick="searchAnimalOnDashboard()" aria-label="Search animal">⌕</button>
+                    </div>
+                    <button class="dashboard-edit-profile-btn" type="button" onclick="switchView('profile-view')">👤 <span data-i18n="editFarmProfile">Farm Profile</span></button>
+                </div>
+            </header>
+
+            <!-- FARM IDENTITY / HERO -->
+            <section class="farm-identity-card">
+                <div class="farm-hero-orbit orbit-one" aria-hidden="true"></div>
+                <div class="farm-hero-orbit orbit-two" aria-hidden="true"></div>
+                <div class="farm-identity-mark" aria-hidden="true">🐄</div>
+                <div class="farm-identity-copy">
+                    <span class="farm-identity-eyebrow" data-i18n="farmWorkspaceLabel">FARM MANAGEMENT WORKSPACE</span>
+                    <h1 id="farmNameHeading">My Farm</h1>
+                    <p><span data-i18n="managedBy">Managed by</span> <strong id="farmOwnerName">Farmer</strong><span class="farm-location-separator"> · </span><span id="farmLocationLine" data-i18n="addFarmLocation">Add your farm location</span></p>
+                    <div class="farm-identity-status">
+                        <span id="farmStatusStrip" class="farm-status-chip"><span id="farmStatusPulse" class="farm-status-pulse"></span><span id="farmStatusText">Checking farm status...</span></span>
+                        <span class="farm-identity-caption" data-i18n="farmOverviewCaption">Your livestock, health and performance in one place.</span>
+                    </div>
+                </div>
+                <div class="farm-identity-actions"><button type="button" class="farm-identity-edit" onclick="switchView('profile-view')">✎ <span data-i18n="editProfile">Edit profile</span></button></div>
+            </section>
+
+            <div id="vaccineAlertBox" class="alert-box hidden" aria-live="polite"></div>
+
+            <div class="dashboard-main-grid">
+                <main class="dashboard-primary-column">
+                    <div class="dashboard-section-heading">
+                        <div><span class="dashboard-section-eyebrow" data-i18n="dashPerformanceLabel">FARM PERFORMANCE</span><h3 data-i18n="dashKeyStatistics">Key Statistics</h3></div>
+                        <span class="dashboard-live-label"><span></span><span data-i18n="dashLiveOverview">LIVE OVERVIEW</span></span>
+                    </div>
+
+                    <div class="dashboard-metric-grid">
+                        <article class="card dashboard-metric-card metric-animals">
+                            <div class="metric-top"><span class="metric-icon">🐄</span><span class="metric-tag">LIVESTOCK</span></div>
+                            <h3 data-i18n="cardActiveAnimals">Total Active Animals</h3><p id="totalAnimals">0</p><small data-i18n="dashActiveAnimalsSub">Active animals in your farm</small>
+                        </article>
+                        <article class="card dashboard-metric-card metric-vaccine">
+                            <div class="metric-top"><span class="metric-icon">💉</span><span class="metric-tag">HEALTH</span></div>
+                            <h3 data-i18n="cardPendingVaccines">Pending Vaccines</h3><p id="pendingVaccines" class="warning-text">0</p><small data-i18n="dashVaccineSub">Due within the next 7 days</small>
+                        </article>
+                        <article class="card dashboard-metric-card metric-profit">
+                            <div class="metric-top"><span class="metric-icon">📈</span><span class="metric-tag">FINANCE</span></div>
+                            <h3 data-i18n="cardOpProfit">Operating Profit (Milk)</h3><p id="totalProfit">0</p><small data-i18n="cardOpSub">Excludes Buying Price</small>
+                        </article>
+                        <article class="card dashboard-metric-card metric-balance">
+                            <div class="metric-top"><span class="metric-icon">💰</span><span class="metric-tag">ASSET</span></div>
+                            <h3 data-i18n="cardFarmBalance">Overall Farm Balance</h3><p id="farmBalance" class="stat-text">0</p><small data-i18n="cardBalanceSub">Net Asset/Profit Value</small>
+                        </article>
+                    </div>
+
+                    <div class="dashboard-quick-actions">
+                        <button class="quick-action-primary" type="button" onclick="switchView('add-data-view')"><span>＋</span><span data-i18n="btnAddAnimal">Add New Animal</span></button>
+                        <button class="quick-action-secondary" type="button" onclick="switchView('daily-update-view')"><span>📝</span><span data-i18n="dashDailyUpdate">Daily Update</span></button>
+                        <button class="quick-action-secondary" type="button" onclick="switchView('animals-view')"><span>🐄</span><span data-i18n="dashViewAnimals">View Animals</span></button>
+                        <button class="quick-action-secondary" type="button" onclick="switchView('edit-data-view')"><span>✏️</span><span data-i18n="btnEditData">Edit Data</span></button>
+                    </div>
+
+                    <div class="dashboard-section-heading chart-section-title">
+                        <div><span class="dashboard-section-eyebrow" data-i18n="dashInsightsLabel">DATA & INSIGHTS</span><h3 data-i18n="dashAnalyticsTitle">Farm Analytics</h3></div>
+                    </div>
+
+                    <div class="dashboard-chart-grid">
+                        <section class="section glass-effect dashboard-panel dashboard-chart-panel">
+                            <div class="dashboard-panel-heading"><div><h3 data-i18n="chartProfitTitle">Operating Expense vs Income</h3><p data-i18n="dashAnimalFinanceSub">Animal-wise financial performance</p></div><span class="panel-icon">💹</span></div>
+                            <div class="dashboard-chart-frame"><canvas id="profitChart"></canvas></div>
+                        </section>
+                        <section class="section glass-effect dashboard-panel dashboard-chart-panel">
+                            <div class="dashboard-panel-heading"><div><h3 data-i18n="chartProdTitle">Production Trend Analytics</h3><p data-i18n="dashMilkTrendSub">Daily milk production records</p></div><span class="panel-icon">🥛</span></div>
+                            <div class="dashboard-chart-frame"><canvas id="productionChart"></canvas></div>
+                        </section>
+                    </div>
+                </main>
+
+                <aside class="dashboard-aside">
+                    <section class="dashboard-panel dashboard-overview-panel">
+                        <div class="dashboard-panel-heading"><div><h3 data-i18n="dashFarmOverview">Farm Overview</h3><p data-i18n="dashActivitySnapshot">Your farm activity snapshot</p></div><span class="panel-icon">🌱</span></div>
+                        <div class="dashboard-activity-status"><span id="dashboardActivityDot"></span><strong id="dashboardActivityStatus">Checking farm activity...</strong></div>
+                        <div class="dashboard-overview-stat"><span data-i18n="dashActiveLivestock">Active Livestock</span><strong id="dashboardAsideActive">0</strong></div>
+                        <div class="dashboard-overview-stat"><span data-i18n="dashAnimalsWithLogs">Animals with Milk Records</span><strong id="dashboardAnimalsWithLogs">0</strong></div>
+                        <div class="dashboard-overview-stat"><span data-i18n="dashTodayMilk">Today's Milk Production</span><strong><span id="dashboardTodayMilk">0</span> <small data-i18n="dashLiters">Liters</small></strong></div>
+                        <div class="dashboard-overview-stat"><span data-i18n="dashTodayRecords">Today's Records</span><strong id="dashboardTodayRecords">0</strong></div>
+                        <div class="dashboard-last-record"><span data-i18n="dashLatestRecord">Latest Milk Record</span><strong id="dashboardLatestRecord">No records yet</strong></div>
+                    </section>
+
+                    <section class="dashboard-panel dashboard-vaccine-panel">
+                        <div class="dashboard-panel-heading"><div><h3 data-i18n="dashUpcomingVaccines">Upcoming Vaccines</h3><p data-i18n="dashNextSevenDays">Next 7 days schedule</p></div><span class="panel-icon">💉</span></div>
+                        <div id="dashboardVaccineList" class="dashboard-vaccine-list" aria-live="polite"><div class="dashboard-empty-state"><span>✓</span><strong data-i18n="dashNoUpcoming">No upcoming vaccines</strong><small data-i18n="dashNoUpcomingSub">No vaccine is due within the next 7 days.</small></div></div>
+                        <button class="dashboard-panel-link" type="button" onclick="switchView('animals-view')"><span data-i18n="dashViewAllAnimals">View all animals</span> →</button>
+                    </section>
+
+                    <section class="dashboard-panel dashboard-performance-panel">
+                        <div class="dashboard-panel-heading"><div><h3 data-i18n="dashPerformanceHighlights">Performance Highlights</h3><p data-i18n="dashBasedOnProfit">Based on recorded operating profit</p></div><span class="panel-icon">🏆</span></div>
+                        <div class="dashboard-performer-item"><span class="performer-icon top-icon">🏆</span><div><small data-i18n="cardTop">Top Performer</small><strong id="topPerformer">N/A</strong></div></div>
+                        <div class="dashboard-performer-item"><span class="performer-icon worst-icon">⚠️</span><div><small data-i18n="dashNeedsAttention">Needs Attention</small><strong id="worstPerformer">N/A</strong></div></div>
+                    </section>
+                </aside>
+            </div>
+        </div>
+    </div>
+
+    <!-- ADD ANIMAL -->
+    <div id="add-data-view" class="view-section hidden animate-fade container">
+        <button class="back-btn" onclick="switchView('dashboard-view')" data-i18n="btnBack">← Back to Dashboard</button>
+        <div class="section glass-effect">
+            <h2 data-i18n="regHeader">Register New Animal</h2>
+            <form id="animalForm">
+                <div class="form-group"><label data-i18n="regId">Animal ID / Tag:</label>
+                    <input type="text" id="animalId" placeholder="e.g., COW-101" required></div>
+                <div class="form-group"><label data-i18n="regBuy">Purchase Price (BDT):</label>
+                    <input type="number" id="buyPrice" min="0" required></div>
+                <div class="form-group"><label data-i18n="regBirth">Birth Date:</label>
+                    <input type="date" id="birthDate" required></div>
+                <div class="form-group"><label data-i18n="regLastVac">Last Vaccination Date:</label>
+                    <input type="date" id="lastVaccine" required></div>
+                <div class="form-group"><label data-i18n="regNextVac">Next Vaccination Date:</label>
+                    <input type="date" id="nextVaccine" required></div>
+                <button type="submit" data-i18n="regSubmit">Register Animal</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- EDIT ANIMAL -->
+    <div id="edit-data-view" class="view-section hidden animate-fade container">
+        <button class="back-btn" onclick="switchView('dashboard-view')" data-i18n="btnBack">← Back to Dashboard</button>
+        <div class="section glass-effect">
+            <h2 data-i18n="editHeader">Edit All Animal Data</h2>
+            <div class="search-box">
+                <input type="text" id="editSearchId" placeholder="Enter Animal ID to edit...">
+                <button onclick="searchToEdit()" data-i18n="btnSearch">Search</button>
+            </div>
+            <div id="editFormSection" class="hidden">
+                <form id="updateProfileForm">
+                    <input type="hidden" id="editId">
+                    <div class="form-group"><label data-i18n="regBuy">Purchase Price (BDT):</label>
+                        <input type="number" id="editBuyPrice" min="0" required></div>
+                    <div class="form-group"><label data-i18n="regBirth">Birth Date:</label>
+                        <input type="date" id="editBirthDate" required></div>
+                    <div class="form-group"><label data-i18n="regLastVac">Last Vaccination Date:</label>
+                        <input type="date" id="editLastVaccine" required></div>
+                    <div class="form-group"><label data-i18n="regNextVac">Next Vaccination Date:</label>
+                        <input type="date" id="editNextVaccine" required></div>
+                    <button type="submit" class="btn-blue" data-i18n="saveChanges">Save Changes</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- DAILY UPDATE -->
+    <div id="daily-update-view" class="view-section hidden animate-fade container">
+        <div class="section glass-effect">
+            <h2 data-i18n="dailyHeader">Daily Data Update</h2>
+            <p data-i18n="dailySub">Update daily milk production and expenses by ID (Active Animals Only).</p>
+            <table class="data-table">
+                <thead><tr><th data-i18n="tblId">Animal ID</th><th data-i18n="tblStatus">Status (After 4 Logs)</th><th data-i18n="tblAction">Action</th></tr></thead>
+                <tbody id="dailyUpdateTableBody"></tbody>
+            </table>
+
+            <div id="dailyLogUpdateSection" class="hidden">
+                <h3 id="historyHeader">Previous Records (fix mistakes here)</h3>
+                <table class="data-table">
+                    <thead><tr><th data-i18n="colDate">Date</th><th data-i18n="colMilk">Milk (L)</th><th data-i18n="colPrice">Price/L</th><th data-i18n="colExp">Expense</th><th data-i18n="colProfit">Profit</th><th data-i18n="tblAction">Action</th></tr></thead>
+                    <tbody id="logHistoryBody"></tbody>
+                </table>
+                <h3 id="updateAnimalHeader">Add Daily Record</h3>
+                <form id="dailyLogForm">
+                    <input type="hidden" id="logAnimalId">
+                    <input type="hidden" id="logEditDate">
+                    <div class="form-group"><label data-i18n="logDateLbl">Record Date:</label>
+                        <input type="date" id="logDate" required></div>
+                    <div class="form-group"><label data-i18n="logMilkLbl">Milk Produced Today (Liters):</label>
+                        <input type="number" id="logMilk" min="0" step="any" required></div>
+                    <div class="form-group"><label data-i18n="logPriceLbl">Sold Price per Liter (BDT):</label>
+                        <input type="number" id="logPrice" min="0" step="any" required></div>
+                    <div class="form-group"><label data-i18n="logExpLbl">Daily Expenses (Food/Meds in BDT):</label>
+                        <input type="number" id="logExpense" min="0" step="any" required></div>
+                    <button type="submit" id="logSubmitBtn" data-i18n="logSubmit">Save Daily Log</button>
+                    <button type="button" id="cancelEditBtn" class="back-btn hidden" onclick="cancelLogEdit()" data-i18n="cancelEdit">Cancel edit</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- SELL -->
+    <div id="sell-animal-view" class="view-section hidden animate-fade container">
+        <div class="section glass-effect">
+            <h2 data-i18n="sellHeader">Sell Animal & Final Calculation</h2>
+            <p class="hint" data-i18n="sellHint">First you will see the profit or loss. The animal is sold only after you press "Sell Now".</p>
+            <form id="sellForm">
+                <div class="form-group"><label data-i18n="tblId">Animal ID:</label>
+                    <input type="text" id="sellAnimalId" required></div>
+                <div class="form-group"><label data-i18n="sellPriceLbl">Selling Price (BDT):</label>
+                    <input type="number" id="sellPrice" min="0" required></div>
+                <button type="submit" class="btn-purple" data-i18n="calcBtn">Calculate Profit / Loss</button>
+            </form>
+            <div id="sellResult" class="alert-box hidden"></div>
+        </div>
+    </div>
+
+    <!-- ALL ANIMALS -->
+    <div id="animals-view" class="view-section hidden animate-fade container">
+        <div class="section glass-effect">
+            <div class="section-head">
+                <h2 data-i18n="allAnimalsHeader">All Animals Overview</h2>
+                <button onclick="downloadReport()" class="btn-blue" data-i18n="downloadBtn">📥 Download Excel/CSV</button>
+            </div>
+            <table class="data-table">
+                <thead><tr><th data-i18n="tblId">ID</th><th data-i18n="colState">State</th><th data-i18n="colLogs">Milk Logs</th><th data-i18n="colOpProfit">Op. Profit (Milk)</th><th data-i18n="colFinalProfit">Final Life Profit</th><th data-i18n="tblAction">Action</th></tr></thead>
+                <tbody id="animalTableBody"></tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- ANALYZER -->
+    <div id="analyzer-view" class="view-section hidden animate-fade container">
+        <div class="section glass-effect">
+            <h2 data-i18n="analyzerHeader">Monthly Financial Analyzer</h2>
+            <canvas id="monthlyChart"></canvas>
+        </div>
+    </div>
+
+    <!-- QR -->
+    <div id="easy-access-view" class="view-section hidden animate-fade container">
+        <div class="section glass-effect text-center">
+            <h2 data-i18n="qrHeader">QR Generator</h2>
+            <div class="search-box center">
+                <input type="text" id="qrSearchId" placeholder="Enter Animal ID...">
+                <button onclick="generateQR()" data-i18n="qrGenBtn">Generate QR</button>
+            </div>
+            <div id="qrResult" class="hidden">
+                <div id="qrcode"></div>
+                <p id="qrInfo" class="qr-info"></p>
+                <button onclick="printQR()" class="btn-dark" data-i18n="qrPrintBtn">🖨️ Print QR Tag</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- SETTINGS -->
+     <!-- ==========================================
+     USER PROFILE & FARM SETTINGS
+========================================== -->
+
+<div id="profile-view"
+     class="view-section hidden animate-fade container profile-page">
+
+    <button
+        class="back-btn profile-back-btn"
+        type="button"
+        onclick="switchView('dashboard-view')"
+        data-i18n="btnBack">
+        ← Back to Dashboard
+    </button>
+
+    <div class="profile-page-heading">
+
+        <div>
+            <span class="dashboard-eyebrow"
+                  data-i18n="profileEyebrow">
+                YOUR ACCOUNT
+            </span>
+
+            <h1 data-i18n="profilePageTitle">
+                Profile & farm settings
+            </h1>
+
+            <p data-i18n="profilePageSubtitle">
+                Personalize your workspace and give your farm its own identity.
+            </p>
+        </div>
+
+        <span class="profile-secure-label">
+            🔒 <span data-i18n="privateProfile">Private to your account</span>
+        </span>
+
+    </div>
+
+
+    <div class="profile-layout">
+
+        <!-- PROFILE PREVIEW -->
+
+        <aside class="profile-summary-card">
+
+            <div class="profile-avatar-large"
+                 id="profileAvatarLarge">
+                F
+            </div>
+
+            <span class="profile-summary-eyebrow"
+                  data-i18n="profilePreview">
+                PROFILE PREVIEW
+            </span>
+
+            <h2 id="profilePreviewName">Farmer</h2>
+
+            <p class="profile-summary-farm"
+               id="profilePreviewFarm">
+                My Farm
+            </p>
+
+            <span class="profile-username-pill"
+                  id="profileUsernamePill">
+                @username
+            </span>
+
+            <div class="profile-summary-divider"></div>
+
+            <div class="profile-summary-detail">
+                <span data-i18n="accountEmailLabel">Account email</span>
+                <strong id="profileEmailPreview">Not added</strong>
+            </div>
+
+            <div class="profile-summary-detail">
+                <span data-i18n="emailVerificationLabel">Email verification</span>
+                <strong id="profileVerificationPreview">Not verified</strong>
+            </div>
+            <!-- ==========================================
+     PROFILE DATA BACKUP
+========================================== -->
+
+<section class="profile-data-card">
+
+    <div class="profile-data-heading">
+
+        <div class="profile-data-icon">
+            ↓
+        </div>
+
+        <div>
+            <h2>Download my farm data</h2>
+
+            <p>
+                Keep a personal copy of your profile, livestock
+                records, financial logs and farm information.
+            </p>
+        </div>
+
+    </div>
+
+    <button
+        type="button"
+        id="downloadFarmBackupBtn"
+        class="profile-backup-btn">
+
+        ↓ Download my data
+
+    </button>
+
+    <p class="profile-tool-note">
+        Your backup is downloaded to your device as a JSON file.
+    </p>
+
+</section>
+
+
+<!-- ==========================================
+     PERMANENT ACCOUNT DELETION
+========================================== -->
+
+<section class="profile-danger-card">
+
+    <div class="profile-danger-heading">
+
+        <div class="profile-danger-icon">
+            !
+        </div>
+
+        <div>
+            <span class="profile-danger-eyebrow">
+                DANGER ZONE
+            </span>
+
+            <h2>Permanently delete account</h2>
+
+            <p>
+                This action cannot be undone. Your account and
+                associated farm records will be permanently removed.
+            </p>
+        </div>
+
+    </div>
+
+
+    <div class="profile-delete-consequences">
+
+        <strong>What will be deleted?</strong>
+
+        <ul>
+            <li>Your account and profile information</li>
+            <li>All animals registered under your account</li>
+            <li>Animal daily logs and financial records</li>
+            <li>Vaccine records and related QR links</li>
+            <li>Your subscription information stored in your account</li>
+        </ul>
+
+    </div>
+
+
+    <div class="profile-delete-warning">
+        Before deleting your account, download your farm data
+        backup if you may need these records later.
+    </div>
+
+
+    <form id="deleteAccountForm" class="profile-delete-form">
+
+        <div class="profile-delete-field">
+
+            <label for="deleteAccountPassword">
+                Enter your current password
+            </label>
+
+            <input
+                type="password"
+                id="deleteAccountPassword"
+                autocomplete="current-password"
+                placeholder="Your current password"
+                required>
+
+        </div>
+
+
+        <div class="profile-delete-field">
+
+            <label for="deleteAccountConfirm">
+                Type DELETE MY ACCOUNT to confirm
+            </label>
+
+            <input
+                type="text"
+                id="deleteAccountConfirm"
+                autocomplete="off"
+                placeholder="DELETE MY ACCOUNT"
+                required>
+
+        </div>
+
+
+        <button
+            type="submit"
+            id="deleteAccountBtn"
+            class="profile-permanent-delete-btn">
+
+            Permanently delete my account
+
+        </button>
+
+        <p
+            id="deleteAccountMessage"
+            class="profile-delete-message"
+            role="status"
+            aria-live="polite">
+        </p>
+
+    </form>
+
+</section>
+
+            <div class="profile-summary-detail">
+                <span data-i18n="memberSince">Member since</span>
+                <strong id="profileJoinedPreview">—</strong>
+            </div>
+
+        </aside>
+
+
+        <!-- PROFILE EDITOR -->
+
+        <section class="profile-editor-card">
+
+            <div class="profile-editor-heading">
+
+                <div class="profile-editor-icon">✦</div>
+
+                <div>
+                    <h2 data-i18n="profileDetailsTitle">
+                        Personal & farm details
+                    </h2>
+
+                    <p data-i18n="profileDetailsHelp">
+                        These details personalize the dashboard. Your login username will not change.
+                    </p>
+                </div>
+
+            </div>
+
+
+            <form id="userProfileForm"
+                  class="profile-editor-form">
+
+                <div class="profile-form-section-label"
+                     data-i18n="personalInformation">
+                    PERSONAL INFORMATION
+                </div>
+
+                <div class="profile-form-field">
+
+                    <label for="profileNameInput"
+                           data-i18n="displayNameLabel">
+                        Your display name
+                    </label>
+
+                    <input
+                        id="profileNameInput"
+                        type="text"
+                        minlength="2"
+                        maxlength="60"
+                        autocomplete="name"
+                        placeholder="e.g. Rahim Uddin"
+                        required>
+
+                    <small data-i18n="displayNameHelp">
+                        This name appears in your dashboard greeting and profile.
+                    </small>
+
+                </div>
+
+
+                <div class="profile-form-field profile-readonly-field">
+
+                    <label for="profileUsernameInput"
+                           data-i18n="loginUsernameLabel">
+                        Login username
+                    </label>
+
+                    <input
+                        id="profileUsernameInput"
+                        type="text"
+                        readonly>
+
+                    <small data-i18n="usernameReadonlyHelp">
+                        Your username is used for login and cannot be changed here.
+                    </small>
+
+                </div>
+
+
+                <div class="profile-form-divider"></div>
+
+                <div class="profile-form-section-label"
+                     data-i18n="farmInformation">
+                    FARM INFORMATION
+                </div>
+
+
+                <div class="profile-form-field">
+
+                    <label for="farmNameInput"
+                           data-i18n="farmNameLabel">
+                        Farm name
+                    </label>
+
+                    <input
+                        id="farmNameInput"
+                        type="text"
+                        maxlength="80"
+                        placeholder="e.g. Green Valley Dairy Farm">
+
+                    <small data-i18n="farmNameHelp">
+                        Your farm name will appear prominently at the top of your dashboard.
+                    </small>
+
+                </div>
+
+
+                <div class="profile-form-field">
+
+                    <label for="farmLocationInput"
+                           data-i18n="farmLocationLabel">
+                        Farm location (optional)
+                    </label>
+
+                    <input
+                        id="farmLocationInput"
+                        type="text"
+                        maxlength="100"
+                        autocomplete="street-address"
+                        placeholder="e.g. Savar, Dhaka">
+
+                </div>
+
+
+                <div class="profile-form-actions">
+
+                    <button
+                        class="profile-save-btn"
+                        id="saveUserProfileBtn"
+                        type="submit">
+                        <span>✓</span>
+                        <span data-i18n="saveProfile">Save profile</span>
+                    </button>
+
+                    <span
+                        id="userProfileMessage"
+                        class="profile-save-message"
+                        role="status"
+                        aria-live="polite">
+                    </span>
+
+                </div>
+
+            </form>
+
+        </section>
+
+    </div>
+
+</div>
+    <div id="settings-view" class="view-section hidden animate-fade container">
+        <div class="section glass-effect">
+            <h2 data-i18n="accountEmailTitle">Account Gmail Verification</h2>
+            <p data-i18n="accountEmailHelp">Add and verify your Gmail address to receive farm alerts and account emails.</p>
+            <form id="accountEmailForm">
+                <div class="form-group">
+                    <label for="accountEmail" data-i18n="labelGmail">Gmail address:</label>
+                    <input type="email" id="accountEmail" placeholder="name@gmail.com" required>
+                </div>
+                <button type="submit" data-i18n="btnSendOtp">Send verification code</button>
+            </form>
+            <form id="accountEmailVerifyForm" class="hidden">
+                <div class="form-group">
+                    <label for="accountEmailOtp" data-i18n="labelOtp">6-digit OTP:</label>
+                    <input type="text" id="accountEmailOtp" inputmode="numeric" maxlength="6" pattern="[0-9]{6}" required>
+                </div>
+                <button type="submit" data-i18n="btnVerify">Verify email</button>
+            </form>
+            <p id="accountEmailMessage" class="hint" aria-live="polite"></p>
+        </div>
+
+        <div class="section glass-effect text-center">
+            <h2 class="danger-title" data-i18n="settingsHeader">System Settings & Data Management</h2>
+            <p data-i18n="settingsSub">Welcome to the admin danger zone. Actions performed here cannot be undone.</p>
+            <div class="danger-zone">
+                <h3 data-i18n="deleteZoneTitle">Delete All Farm Data</h3>
+                <p data-i18n="deleteZoneSub">This will erase every animal and every log from the system forever.</p>
+                <button onclick="deleteAllSystemData()" class="btn-danger" data-i18n="deleteBtn">🗑️ Delete ALL System Data</button>
+            </div>
+        </div>
+    </div>
+
+    <footer id="appFooter" class="hidden">
+        <p>Developed by Nur Hossain Rhedoy</p>
+    </footer>
+
+    <!-- Farm-aware Gemini AI assistant. Requires GEMINI_API_KEY in the server .env file. -->
+    <button id="aiLauncher" class="ai-launcher hidden" type="button" onclick="toggleAIChat()" data-i18n="aiLauncher">🤖 Smart-Agro AI</button>
+    <section id="aiPanel" class="ai-panel hidden" aria-label="Smart-Agro AI chat">
+        <header class="ai-header">
+            <div><strong data-i18n="aiTitle">Smart-Agro AI</strong><small data-i18n="aiSubtitle">Farm assistant</small></div>
+            <button type="button" class="ai-close" onclick="toggleAIChat()" aria-label="Close chat">×</button>
+        </header>
+        <div id="aiMessages" class="ai-messages" aria-live="polite">
+            <div class="ai-message assistant" data-i18n="aiWelcome">Hello! Ask me about your farm records, milk production, costs, profit, or vaccination schedule.</div>
+        </div>
+        <form id="aiForm" class="ai-form">
+            <textarea id="aiInput" rows="2" maxlength="2500" placeholder="Ask about your farm..." data-i18n-placeholder="aiPlaceholder" required></textarea>
+            <button id="aiSendBtn" type="submit" data-i18n="aiSend">Send</button>
+        </form>
+        <p class="ai-disclaimer" data-i18n="aiDisclaimer">AI can make mistakes. For animal illness or treatment, consult a veterinarian.</p>
+    </section>
+
+    <script src="calc.js"></script>
+    <script src="script.js"></script>
+<script>
+(function () {
+
+    'use strict';
+
+    const $profile = id => document.getElementById(id);
+
+    let profileRequest = null;
+    let savedProfile = null;
+
+
+    // =========================================
+    // ENGLISH / BANGLA TEXT
+    // =========================================
+
+    Object.assign(dict.en, {
+        navProfile: 'Profile',
+        dashboardEyebrow: 'YOUR FARM WORKSPACE',
+        welcomeBack: 'Welcome back,',
+        editFarmProfile: 'Edit farm profile',
+        farmWorkspaceLabel: 'FARM MANAGEMENT WORKSPACE',
+        managedBy: 'Managed by',
+        addFarmLocation: 'Add your farm location',
+        farmOverviewCaption: 'Your livestock, health and performance in one place.',
+        editProfile: 'Edit profile',
+        profileEyebrow: 'YOUR ACCOUNT',
+        profilePageTitle: 'Profile & farm settings',
+        profilePageSubtitle: 'Personalize your workspace and give your farm its own identity.',
+        privateProfile: 'Private to your account',
+        profilePreview: 'PROFILE PREVIEW',
+        accountEmailLabel: 'Account email',
+        emailVerificationLabel: 'Email verification',
+        memberSince: 'Member since',
+        profileDetailsTitle: 'Personal & farm details',
+        profileDetailsHelp: 'These details personalize the dashboard. Your login username will not change.',
+        personalInformation: 'PERSONAL INFORMATION',
+        displayNameLabel: 'Your display name',
+        displayNameHelp: 'This name appears in your dashboard greeting and profile.',
+        loginUsernameLabel: 'Login username',
+        usernameReadonlyHelp: 'Your username is used for login and cannot be changed here.',
+        farmInformation: 'FARM INFORMATION',
+        farmNameLabel: 'Farm name',
+        farmNameHelp: 'Your farm name will appear prominently at the top of your dashboard.',
+        farmLocationLabel: 'Farm location (optional)',
+        saveProfile: 'Save profile',
+        notAdded: 'Not added',
+        notVerified: 'Not verified',
+        verified: 'Verified',
+        myFarm: 'My Farm',
+        profileNameRequired: 'Enter your display name (2–60 characters).'
+    });
+
+
+    Object.assign(dict.bn, {
+        navProfile: 'প্রোফাইল',
+        dashboardEyebrow: 'আপনার খামার ব্যবস্থাপনা',
+        welcomeBack: 'স্বাগতম,',
+        editFarmProfile: 'খামারের প্রোফাইল সম্পাদনা',
+        farmWorkspaceLabel: 'খামার ব্যবস্থাপনা ওয়ার্কস্পেস',
+        managedBy: 'পরিচালনায়',
+        addFarmLocation: 'খামারের অবস্থান যোগ করুন',
+        farmOverviewCaption: 'পশু, স্বাস্থ্য ও খামারের পারফরম্যান্স এক জায়গায়।',
+        editProfile: 'প্রোফাইল সম্পাদনা',
+        profileEyebrow: 'আপনার অ্যাকাউন্ট',
+        profilePageTitle: 'প্রোফাইল ও খামারের সেটিংস',
+        profilePageSubtitle: 'আপনার প্রোফাইল সাজান এবং খামারের নিজস্ব পরিচয় দিন।',
+        privateProfile: 'শুধু আপনার অ্যাকাউন্টে দেখা যাবে',
+        profilePreview: 'প্রোফাইল প্রিভিউ',
+        accountEmailLabel: 'অ্যাকাউন্ট ইমেইল',
+        emailVerificationLabel: 'ইমেইল যাচাই',
+        memberSince: 'সদস্য হয়েছেন',
+        profileDetailsTitle: 'ব্যক্তিগত ও খামারের তথ্য',
+        profileDetailsHelp: 'এই তথ্যগুলো ড্যাশবোর্ডে দেখানো হবে। লগইন ইউজারনেম পরিবর্তন হবে না।',
+        personalInformation: 'ব্যক্তিগত তথ্য',
+        displayNameLabel: 'আপনার প্রদর্শিত নাম',
+        displayNameHelp: 'এই নাম ড্যাশবোর্ডের শুভেচ্ছা ও প্রোফাইলে দেখা যাবে।',
+        loginUsernameLabel: 'লগইন ইউজারনেম',
+        usernameReadonlyHelp: 'লগইনের জন্য ব্যবহৃত ইউজারনেম এখানে পরিবর্তন করা যাবে না।',
+        farmInformation: 'খামারের তথ্য',
+        farmNameLabel: 'খামারের নাম',
+        farmNameHelp: 'এই নাম ড্যাশবোর্ডের উপরে বড় করে দেখানো হবে।',
+        farmLocationLabel: 'খামারের অবস্থান (ঐচ্ছিক)',
+        saveProfile: 'প্রোফাইল সংরক্ষণ করুন',
+        notAdded: 'যোগ করা হয়নি',
+        notVerified: 'যাচাই হয়নি',
+        verified: 'যাচাইকৃত',
+        myFarm: 'আমার খামার',
+        profileNameRequired: 'আপনার নাম লিখুন (২–৬০ অক্ষর)।'
+    });
+
+
+    function profileText(key) {
+        return (
+            (dict[currentLang] && dict[currentLang][key]) ||
+            dict.en[key] ||
+            key
+        );
+    }
+
+
+    function profileDate(value) {
+        if (!value) return '—';
+
+        const date = new Date(value);
+
+        if (Number.isNaN(date.getTime())) return '—';
+
+        return date.toLocaleDateString(
+            currentLang === 'bn' ? 'bn-BD' : 'en-US',
+            {
+                month: 'short',
+                day: 'numeric',
+                year: 'numeric'
+            }
+        );
+    }
+
+
+    // =========================================
+    // DISPLAY PROFILE INFORMATION
+    // =========================================
+
+    function paintProfile(profile) {
+        if (!profile) return;
+
+        savedProfile = profile;
+
+        const displayName = String(
+            profile.profileName ||
+            profile.username ||
+            'Farmer'
+        ).trim();
+
+        const farmName =
+            String(profile.farmName || '').trim() ||
+            profileText('myFarm');
+
+        const location = String(
+            profile.farmLocation || ''
+        ).trim();
+
+        const initial =
+            Array.from(displayName)[0] || 'F';
+
+
+        if ($profile('dashboardProfileName')) {
+            $profile('dashboardProfileName').textContent = displayName;
+        }
+
+        if ($profile('farmOwnerName')) {
+            $profile('farmOwnerName').textContent = displayName;
+        }
+
+        if ($profile('farmNameHeading')) {
+            $profile('farmNameHeading').textContent = farmName;
+        }
+
+        if ($profile('farmLocationLine')) {
+            $profile('farmLocationLine').textContent =
+                location || profileText('addFarmLocation');
+        }
+
+
+        if ($profile('profileAvatarLarge')) {
+            $profile('profileAvatarLarge').textContent =
+                initial.toLocaleUpperCase();
+        }
+
+        if ($profile('profilePreviewName')) {
+            $profile('profilePreviewName').textContent = displayName;
+        }
+
+        if ($profile('profilePreviewFarm')) {
+            $profile('profilePreviewFarm').textContent = farmName;
+        }
+
+        if ($profile('profileUsernamePill')) {
+            $profile('profileUsernamePill').textContent =
+                '@' + (profile.username || '');
+        }
+
+        if ($profile('profileEmailPreview')) {
+            $profile('profileEmailPreview').textContent =
+                profile.email || profileText('notAdded');
+        }
+
+        if ($profile('profileVerificationPreview')) {
+            $profile('profileVerificationPreview').textContent =
+                profile.emailVerified
+                    ? profileText('verified')
+                    : profileText('notVerified');
+        }
+
+        if ($profile('profileJoinedPreview')) {
+            $profile('profileJoinedPreview').textContent =
+                profileDate(profile.createdAt);
+        }
+
+
+        // Fill edit form.
+
+        if ($profile('profileNameInput')) {
+            $profile('profileNameInput').value =
+                profile.profileName || profile.username || '';
+        }
+
+        if ($profile('profileUsernameInput')) {
+            $profile('profileUsernameInput').value =
+                profile.username || '';
+        }
+
+        if ($profile('farmNameInput')) {
+            $profile('farmNameInput').value =
+                profile.farmName || '';
+        }
+
+        if ($profile('farmLocationInput')) {
+            $profile('farmLocationInput').value =
+                profile.farmLocation || '';
+        }
+    }
+
+
+    // =========================================
+    // LOAD USER PROFILE FROM BACKEND
+    // =========================================
+
+    async function loadUserProfile() {
+
+        if (!localStorage.getItem('token')) {
+            return null;
+        }
+
+        if (profileRequest) {
+            return profileRequest;
+        }
+
+        profileRequest = api('/api/auth/me')
+            .then(profile => {
+                paintProfile(profile);
+                return profile;
+            })
+            .catch(error => {
+                console.error('Profile loading failed:', error);
+                throw error;
+            })
+            .finally(() => {
+                profileRequest = null;
+            });
+
+        return profileRequest;
+    }
+
+
+    // =========================================
+    // INTEGRATE WITH EXISTING VIEW SWITCHER
+    // =========================================
+
+    const originalSwitchView = window.switchView;
+
+    if (typeof originalSwitchView === 'function') {
+
+        window.switchView = function (viewId) {
+
+            const result = originalSwitchView.apply(
+                this,
+                arguments
+            );
+
+            document.querySelectorAll(
+                '.nav-links [data-view]'
+            ).forEach(button => {
+
+                const active =
+                    button.getAttribute('data-view') === viewId;
+
+                button.classList.toggle(
+                    'is-current',
+                    active
+                );
+
+                if (active) {
+                    button.setAttribute('aria-current', 'page');
+                } else {
+                    button.removeAttribute('aria-current');
+                }
+            });
+
+
+            if (
+                viewId === 'dashboard-view' ||
+                viewId === 'profile-view'
+            ) {
+                loadUserProfile().catch(() => {});
+            }
+
+            return result;
+        };
+    }
+
+
+    // =========================================
+    // SAVE PROFILE
+    // =========================================
+
+    if ($profile('userProfileForm')) {
+
+        $profile('userProfileForm').addEventListener(
+            'submit',
+            async event => {
+
+                event.preventDefault();
+
+                const button =
+                    $profile('saveUserProfileBtn');
+
+                const profileName =
+                    $profile('profileNameInput').value.trim();
+
+                const farmName =
+                    $profile('farmNameInput').value.trim();
+
+                const farmLocation =
+                    $profile('farmLocationInput').value.trim();
+
+
+                if (
+                    profileName.length < 2 ||
+                    profileName.length > 60
+                ) {
+                    $profile('userProfileMessage').textContent =
+                        profileText('profileNameRequired');
+
+                    $profile('userProfileMessage').classList.add(
+                        'is-error'
+                    );
+
+                    $profile('profileNameInput').focus();
+
+                    return;
+                }
+
+
+                button.disabled = true;
+
+                button.querySelector('span:last-child').textContent =
+                    currentLang === 'bn'
+                        ? 'সংরক্ষণ হচ্ছে...'
+                        : 'Saving...';
+
+                $profile('userProfileMessage').textContent = '';
+
+                $profile('userProfileMessage').classList.remove(
+                    'is-error',
+                    'is-success'
+                );
+
+
+                try {
+
+                    const result = await api(
+                        '/api/auth/profile',
+                        'PATCH',
+                        {
+                            profileName,
+                            farmName,
+                            farmLocation
+                        }
+                    );
+
+                    paintProfile(result.profile);
+
+                    $profile('userProfileMessage').textContent =
+                        result.message || 'Profile updated successfully.';
+
+                    $profile('userProfileMessage').classList.add(
+                        'is-success'
+                    );
+
+                } catch (error) {
+
+                    $profile('userProfileMessage').textContent =
+                        error.message || 'Could not save your profile.';
+
+                    $profile('userProfileMessage').classList.add(
+                        'is-error'
+                    );
+
+                } finally {
+
+                    button.disabled = false;
+
+                    button.querySelector('span:last-child').textContent =
+                        profileText('saveProfile');
+                }
+            }
+        );
+    }
+
+
+    // Load profile for an already logged-in user.
+
+    loadUserProfile().catch(() => {});
+
+})();
+</script>
+
+<script>
+(function () {
+    'use strict';
+
+    // ===============================================
+    // DOWNLOAD PERSONAL FARM DATA BACKUP
+    // ===============================================
+
+    const backupButton = document.getElementById(
+        'downloadFarmBackupBtn'
+    );
+
+    if (backupButton) {
+        backupButton.addEventListener('click', async () => {
+
+            backupButton.disabled = true;
+
+            backupButton.textContent = 'Preparing backup...';
+
+            try {
+
+                const [profile, animals] = await Promise.all([
+                    api('/api/auth/me'),
+                    api('/api/animals')
+                ]);
+
+
+                // Exclude secret QR keys from the export.
+                const safeAnimals = (animals || []).map(animal => {
+                    const copy = { ...animal };
+
+                    delete copy.qrKey;
+
+                    return copy;
+                });
+
+
+                const backup = {
+                    application: 'Smart-Agro',
+
+                    backupVersion: 1,
+
+                    exportedAt: new Date().toISOString(),
+
+                    account: {
+                        username: profile.username,
+                        profileName: profile.profileName || profile.username,
+                        farmName: profile.farmName || '',
+                        farmLocation: profile.farmLocation || '',
+                        email: profile.email || null,
+                        emailVerified: profile.emailVerified === true,
+                        createdAt: profile.createdAt || null,
+                        subscription: profile.subscription || null
+                    },
+
+                    animals: safeAnimals
+                };
+
+
+                const blob = new Blob(
+                    [JSON.stringify(backup, null, 2)],
+                    { type: 'application/json;charset=utf-8' }
+                );
+
+                const url = URL.createObjectURL(blob);
+
+                const link = document.createElement('a');
+
+                const username = String(
+                    profile.username || 'user'
+                ).replace(/[^a-zA-Z0-9_-]/g, '_');
+
+                const date = new Date()
+                    .toISOString()
+                    .slice(0, 10);
+
+                link.href = url;
+
+                link.download =
+                    `smart-agro-${username}-backup-${date}.json`;
+
+                document.body.appendChild(link);
+
+                link.click();
+
+                link.remove();
+
+                setTimeout(() => URL.revokeObjectURL(url), 1000);
+
+                alert('Your farm data backup has been downloaded successfully.');
+
+            } catch (error) {
+
+                alert('Backup failed: ' + error.message);
+
+            } finally {
+
+                backupButton.disabled = false;
+
+                backupButton.textContent = '↓ Download my data';
+            }
+        });
+    }
+
+
+    // ===============================================
+    // PERMANENT ACCOUNT DELETION
+    // ===============================================
+
+    const deleteForm = document.getElementById(
+        'deleteAccountForm'
+    );
+
+    if (deleteForm) {
+
+        deleteForm.addEventListener('submit', async event => {
+
+            event.preventDefault();
+
+            const password = document.getElementById(
+                'deleteAccountPassword'
+            ).value;
+
+            const confirmation = document.getElementById(
+                'deleteAccountConfirm'
+            ).value.trim();
+
+            const button = document.getElementById(
+                'deleteAccountBtn'
+            );
+
+            const message = document.getElementById(
+                'deleteAccountMessage'
+            );
+
+
+            message.textContent = '';
+            message.classList.remove('is-error', 'is-success');
+
+
+            if (!password) {
+                message.textContent = 'Enter your current password.';
+                message.classList.add('is-error');
+                return;
+            }
+
+
+            if (confirmation !== 'DELETE MY ACCOUNT') {
+                message.textContent =
+                    'Type DELETE MY ACCOUNT exactly to confirm.';
+
+                message.classList.add('is-error');
+
+                return;
+            }
+
+
+            const confirmed = window.confirm(
+                'FINAL CONFIRMATION\n\n' +
+                'Your user account and all associated farm records ' +
+                'will be permanently deleted.\n\n' +
+                'This action cannot be undone.\n\n' +
+                'Do you want to continue?'
+            );
+
+            if (!confirmed) return;
+
+
+            button.disabled = true;
+
+            button.textContent = 'Deleting account...';
+
+            message.textContent =
+                'Verifying your password and deleting account...';
+
+
+            try {
+
+                const result = await api(
+                    '/api/auth/account',
+                    'DELETE',
+                    {
+                        password,
+                        confirmation
+                    }
+                );
+
+
+                // Remove the now-invalid authentication token.
+
+                localStorage.removeItem('token');
+
+
+                alert(
+                    result.message +
+                    '\n\nFarm records deleted: ' +
+                    Number(result.deletedAnimals || 0)
+                );
+
+
+                // Return to the login page.
+
+                window.location.replace('/');
+
+            } catch (error) {
+
+                message.textContent = error.message;
+
+                message.classList.add('is-error');
+
+                button.disabled = false;
+
+                button.textContent =
+                    'Permanently delete my account';
+            }
+        });
+    }
+
+})();
+</script>
+</body>
+</html>

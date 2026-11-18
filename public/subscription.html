@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Smart-Agro Subscription</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css.css">
+</head>
+<body>
+  <div class="bg-animation"></div>
+  <main class="addon-page">
+    <header class="addon-header">
+      <div><h1 class="logo">🐄 Smart-Agro <span>Subscription Plans</span></h1><p>Choose the plan that fits your farm.</p></div>
+      <div class="addon-actions"><button class="back-btn" type="button" onclick="location.href='index.html'">Back to Farm</button></div>
+    </header>
+    <section class="section glass-effect">
+      <h2>Current Plan</h2>
+      <div id="currentPlan">Loading...</div>
+      <p id="planMessage" class="hint" aria-live="polite"></p>
+    </section>
+    <section class="section glass-effect">
+      <h2>Available Plans</h2>
+      <div id="plans" class="plan-grid">Loading plans...</div>
+    </section>
+  </main>
+<script>
+if(localStorage.getItem('theme')==='dark')document.documentElement.setAttribute('data-theme','dark');
+const token=()=>localStorage.getItem('token');
+const esc=value=>String(value??'').replace(/[&<>"']/g,char=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]));
+async function api(url,method='GET',body){
+  const response=await fetch(url,{method,headers:{'Content-Type':'application/json',...(token()?{Authorization:'Bearer '+token()}:{})},body:body?JSON.stringify(body):undefined});
+  const data=await response.json().catch(()=>({}));
+  if(!response.ok)throw new Error(data.message||'Request failed');
+  return data;
+}
+function showCurrent(data){
+  const subscription=data.subscription;
+  document.getElementById('currentPlan').innerHTML=subscription
+    ? `<h3>${esc(subscription.planName)}</h3><p><span class="status-pill ${subscription.status==='active'?'status-active':'status-expired'}">${esc(subscription.status)}</span></p><p>Started: <strong>${esc(subscription.startDate||'—')}</strong> &nbsp; Ends: <strong>${esc(subscription.endDate||'—')}</strong></p>`
+    : '<p>No plan is currently selected.</p>';
+}
+async function choosePlan(code){
+  try{
+    const result=await api('/api/subscription/select','POST',{planCode:code});
+    showCurrent(result);
+    document.getElementById('planMessage').textContent=result.message;
+  }catch(error){document.getElementById('planMessage').textContent=error.message;}
+}
+(async()=>{
+  try{
+    const profile=await api('/api/auth/me');
+    if(profile.role!=='user'){location.href='admin.html';return;}
+    const data=await api('/api/subscription/me');
+    showCurrent(data);
+    document.getElementById('plans').innerHTML=data.plans.map(plan=>
+      `<article class="plan-card ${data.subscription&&data.subscription.planCode===plan.code?'current':''}"><h3>${esc(plan.name)}</h3><div class="plan-price">${plan.price===0?'Free':`৳${Number(plan.price).toLocaleString('en-US')}`}</div><p>${esc(plan.description)}</p><small>${plan.durationDays} days</small><button type="button" onclick="choosePlan('${esc(plan.code)}')">${data.subscription&&data.subscription.planCode===plan.code?'Select Again':'Choose Plan'}</button></article>`
+    ).join('');
+  }catch(error){localStorage.removeItem('token');location.href='index.html';}
+})();
+</script>
+</body>
+</html>

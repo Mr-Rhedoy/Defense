@@ -1,0 +1,1803 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#17233d">
+  <title>Smart-Agro | Admin Dashboard</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body class="admin-body">
+  <div class="bg-animation"></div>
+
+  <div class="admin-shell">
+    <aside class="admin-sidebar">
+      <a class="admin-brand" href="admin.html">
+        <span class="admin-brand-icon">🐄</span>
+        <span><strong>SMART-AGRO</strong><small>ADMINISTRATION</small></span>
+      </a>
+
+      <div class="admin-nav-label">WORKSPACE</div>
+      <nav class="admin-nav" aria-label="Admin navigation">
+        <a class="active" href="#overview"><span>▦</span> Overview</a>
+        <a href="#analytics"><span>▤</span> Analytics</a>
+        <a href="#account-tools"><span>＋</span> Account tools</a>
+        <a href="#user-management"><span>♙</span> User management</a>
+        <a href="#audit-log"><span>◷</span> Audit log</a>
+        <a href="#admin-management"><span>⚿</span> Admin management</a>
+      </nav>
+
+      <div class="admin-sidebar-bottom">
+        <div class="admin-sidebar-user">
+          <div class="admin-avatar" id="sidebarAvatar">A</div>
+          <div class="admin-sidebar-user-copy">
+            <strong id="sidebarUsername">Administrator</strong>
+            <small id="sidebarRole">Admin</small>
+          </div>
+        </div>
+        <button class="admin-sidebar-logout" type="button" onclick="logoutAdmin()">↪ <span>Log out</span></button>
+      </div>
+    </aside>
+
+    <main class="admin-main">
+      <header class="admin-topbar">
+        <div>
+          <div class="admin-breadcrumb">Smart-Agro <span>/</span> Administration</div>
+          <h1>Dashboard Overview</h1>
+          <p id="welcomeText">Loading administrator account...</p>
+        </div>
+        <div class="admin-topbar-actions">
+          <span class="admin-live-indicator"><i></i> Live data</span>
+          <button class="admin-icon-btn" id="themeToggle" type="button" title="Toggle theme" aria-label="Toggle theme">☾</button>
+          <button class="admin-secondary-btn" type="button" onclick="location.href='index.html'">Open farm app ↗</button>
+          <button class="admin-primary-btn" id="farmWorkspaceBtn" type="button" onclick="location.href='index.html?farm=1'" hidden>My farm</button>
+        </div>
+      </header>
+
+      <section class="admin-hero-banner" aria-label="Administrator welcome">
+        <div class="admin-hero-copy">
+          <span class="admin-hero-eyebrow"><i></i> PLATFORM CONTROL CENTER</span>
+          <h2>Good to see you, <span id="heroAdminName">Administrator</span></h2>
+          <p>Manage your Smart-Agro platform, review account activity and keep everything running smoothly.</p>
+          <div class="admin-hero-meta">
+            <span><b class="admin-hero-meta-dot"></b> Dashboard data is connected</span>
+            <span>Today · <strong id="heroToday">—</strong></span>
+          </div>
+        </div>
+        <div class="admin-hero-actions">
+          <button class="admin-hero-button" type="button" onclick="document.getElementById('user-management').scrollIntoView({behavior:'smooth'})">Manage users <span>↗</span></button>
+          <div class="admin-hero-art" aria-hidden="true">
+            <span class="admin-hero-orbit orbit-one"></span>
+            <span class="admin-hero-orbit orbit-two"></span>
+            <span class="admin-hero-leaf">✦</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- OVERVIEW -->
+      <section id="overview" class="admin-section-anchor">
+        <div class="admin-section-heading">
+          <div>
+            <h2>Platform overview</h2>
+            <p>Key account, farm and subscription metrics.</p>
+          </div>
+          <button class="admin-refresh-btn" id="refreshBtn" type="button">↻ Refresh data</button>
+        </div>
+
+        <div class="admin-stat-grid">
+          <article class="admin-stat-card">
+            <div class="admin-stat-top"><span>Total users</span><span class="admin-stat-icon blue">♙</span></div>
+            <strong id="totalUsers">—</strong>
+            <small>Registered user accounts</small>
+          </article>
+          <article class="admin-stat-card">
+            <div class="admin-stat-top"><span>Enabled accounts</span><span class="admin-stat-icon green">✓</span></div>
+            <strong id="activeUsers">—</strong>
+            <small>Accounts allowed to sign in</small>
+          </article>
+          <article class="admin-stat-card">
+            <div class="admin-stat-top"><span>Disabled accounts</span><span class="admin-stat-icon red">Ⅱ</span></div>
+            <strong id="inactiveUsers">—</strong>
+            <small>Accounts blocked by admin</small>
+          </article>
+          <article class="admin-stat-card">
+            <div class="admin-stat-top"><span>Logged in · 7 days</span><span class="admin-stat-icon purple">↗</span></div>
+            <strong id="recentLoginUsers7d">—</strong>
+            <small>Users with a recent login</small>
+          </article>
+          <article class="admin-stat-card">
+            <div class="admin-stat-top"><span>Administrators</span><span class="admin-stat-icon amber">⚿</span></div>
+            <strong id="totalAdmins">—</strong>
+            <small><span id="activeAdmins">—</span> enabled administrator(s)</small>
+          </article>
+          <article class="admin-stat-card">
+            <div class="admin-stat-top"><span>Registered animals</span><span class="admin-stat-icon green">🐄</span></div>
+            <strong id="totalAnimals">—</strong>
+            <small>Across all user accounts</small>
+          </article>
+          <article class="admin-stat-card">
+            <div class="admin-stat-top"><span>Verified emails</span><span class="admin-stat-icon blue">✉</span></div>
+            <strong id="verifiedUsers">—</strong>
+            <small><span id="unverifiedUsers">—</span> unverified user email(s)</small>
+          </article>
+          <article class="admin-stat-card">
+            <div class="admin-stat-top"><span>Active subscriptions</span><span class="admin-stat-icon purple">◇</span></div>
+            <strong id="subscriptionActive">—</strong>
+            <small><span id="subscriptionExpired">—</span> expired · <span id="subscriptionInactive">—</span> inactive</small>
+          </article>
+        </div>
+
+        <div class="admin-chart-grid">
+          <article class="admin-panel-card">
+            <div class="admin-panel-heading">
+              <div><h3>User registration trend</h3><p>New user accounts · last six months</p></div>
+              <span class="admin-panel-tag">Monthly</span>
+            </div>
+            <div class="admin-chart-wrap"><canvas id="registrationChart" aria-label="Monthly user registrations"></canvas></div>
+          </article>
+          <article class="admin-panel-card">
+            <div class="admin-panel-heading">
+              <div><h3>Subscription distribution</h3><p>Users grouped by selected plan</p></div>
+              <span class="admin-panel-tag">Plans</span>
+            </div>
+            <div class="admin-chart-wrap admin-doughnut-wrap"><canvas id="subscriptionChart" aria-label="Subscription plan distribution"></canvas></div>
+            <p class="admin-chart-footnote">Plan selection is not proof of payment. Payment status is tracked separately.</p>
+          </article>
+        </div>
+
+        <div class="admin-recent-grid">
+          <article class="admin-panel-card">
+            <div class="admin-panel-heading">
+              <div><h3>Recent registrations</h3><p>Latest six user accounts</p></div>
+              <a href="#user-management" class="admin-text-link">View all →</a>
+            </div>
+            <div class="admin-table-wrap">
+              <table class="admin-table compact-table">
+                <thead><tr><th>User</th><th>Email</th><th>Verification</th><th>Joined</th></tr></thead>
+                <tbody id="recentRegistrationsTable"><tr><td colspan="4" class="admin-empty">Loading registrations...</td></tr></tbody>
+              </table>
+            </div>
+          </article>
+          <article class="admin-panel-card">
+            <div class="admin-panel-heading">
+              <div><h3>Recent administrator sign-ins</h3><p>Latest recorded admin logins</p></div>
+              <a href="#admin-management" class="admin-text-link">View admins →</a>
+            </div>
+            <div id="recentAdminSignIns" class="admin-activity-list">
+              <div class="admin-empty">Loading administrator sign-ins...</div>
+            </div>
+          </article>
+        </div>
+        <p class="admin-updated-note" id="updatedAt">Waiting for dashboard data...</p>
+      </section>
+
+      <!-- DATE RANGE ANALYTICS -->
+      <section id="analytics" class="admin-content-section admin-section-anchor">
+        <div class="admin-section-heading">
+          <div>
+            <h2>Date-range analytics</h2>
+            <p>Explore user registrations and account quality over a selected period.</p>
+          </div>
+          <span class="admin-panel-tag" id="analyticsRangeLabel">Last 30 days</span>
+        </div>
+
+        <article class="admin-panel-card">
+          <form id="analyticsFilterForm" class="admin-filter-toolbar analytics-toolbar">
+            <div class="admin-filter-field">
+              <label for="analyticsFrom">From</label>
+              <input id="analyticsFrom" type="date" required>
+            </div>
+            <div class="admin-filter-field">
+              <label for="analyticsTo">To</label>
+              <input id="analyticsTo" type="date" required>
+            </div>
+            <button class="admin-primary-btn" type="submit">Apply range</button>
+            <button class="admin-secondary-btn" id="analyticsLast30" type="button">Last 30 days</button>
+          </form>
+
+          <p id="analyticsMessage" class="admin-message" aria-live="polite"></p>
+
+          <div class="admin-stat-grid analytics-stat-grid">
+            <article class="admin-stat-card">
+              <div class="admin-stat-top"><span>New users</span><span class="admin-stat-icon blue">＋</span></div>
+              <strong id="rangeNewUsers">—</strong>
+              <small>Registered in selected period</small>
+            </article>
+            <article class="admin-stat-card">
+              <div class="admin-stat-top"><span>Enabled accounts</span><span class="admin-stat-icon blue">✓</span></div>
+              <strong id="rangeActiveUsers">—</strong>
+              <small>Currently enabled among new users</small>
+            </article>
+            <article class="admin-stat-card">
+              <div class="admin-stat-top"><span>Verified emails</span><span class="admin-stat-icon purple">✉</span></div>
+              <strong id="rangeVerifiedUsers">—</strong>
+              <small>Verified among new users</small>
+            </article>
+            <article class="admin-stat-card">
+              <div class="admin-stat-top"><span>Disabled accounts</span><span class="admin-stat-icon red">Ⅱ</span></div>
+              <strong id="rangeDisabledUsers">—</strong>
+              <small>Currently disabled among new users</small>
+            </article>
+          </div>
+
+          <div class="admin-panel-heading analytics-chart-heading">
+            <div><h3>Registration activity</h3><p>Daily buckets for shorter ranges; monthly buckets for longer ranges.</p></div>
+          </div>
+          <div class="admin-chart-wrap analytics-period-chart">
+            <canvas id="periodRegistrationChart" aria-label="Registration activity for selected date range"></canvas>
+          </div>
+        </article>
+      </section>
+
+      <!-- ACCOUNT TOOLS -->
+      <section id="account-tools" class="admin-content-section admin-section-anchor">
+        <div class="admin-section-heading">
+          <div><h2>Account tools</h2><p>Create accounts and verify the administrator email.</p></div>
+        </div>
+
+        <div class="admin-tools-grid">
+          <article class="admin-panel-card">
+            <div class="admin-panel-heading">
+              <div><h3>Administrator email</h3><p>Verified email is used for account notifications.</p></div>
+              <span class="admin-panel-tag">Account</span>
+            </div>
+            <p id="adminEmailStatus" class="admin-message" aria-live="polite">Checking email status...</p>
+            <form id="adminEmailForm" class="admin-form-stack">
+              <label for="adminEmail">Gmail address</label>
+              <input id="adminEmail" type="email" placeholder="name@gmail.com" required>
+              <button class="admin-primary-btn" type="submit">Send verification code</button>
+            </form>
+            <form id="adminEmailVerifyForm" class="admin-form-stack hidden">
+              <label for="adminEmailOtp">6-digit verification code</label>
+              <input id="adminEmailOtp" type="text" inputmode="numeric" maxlength="6" pattern="[0-9]{6}" required>
+              <button class="admin-primary-btn" type="submit">Verify Gmail</button>
+            </form>
+          </article>
+
+          <article class="admin-panel-card">
+            <div class="admin-panel-heading">
+              <div><h3>Create a user account</h3><p>Create a user and send their Gmail verification code.</p></div>
+              <span class="admin-panel-tag">User</span>
+            </div>
+            <form id="createUserForm" class="admin-form-stack">
+              <label for="newUsername">Username</label>
+              <input id="newUsername" type="text" minlength="3" maxlength="40" autocomplete="off" required>
+              <label for="newUserEmail">Gmail address</label>
+              <input id="newUserEmail" type="email" placeholder="name@gmail.com" required>
+              <label for="newPassword">Initial password · 8+ characters</label>
+              <input id="newPassword" type="password" minlength="8" autocomplete="new-password" required>
+              <button class="admin-primary-btn" type="submit">Create user account</button>
+            </form>
+            <p id="createMessage" class="admin-message" aria-live="polite"></p>
+          </article>
+
+          <article id="createAdminSection" class="admin-panel-card hidden">
+            <div class="admin-panel-heading">
+              <div><h3>Create an administrator</h3><p>Main administrator permission required.</p></div>
+              <span class="admin-panel-tag admin-tag-main">Main admin only</span>
+            </div>
+            <form id="createAdminForm" class="admin-form-stack">
+              <label for="newAdminUsername">Admin username</label>
+              <input id="newAdminUsername" type="text" minlength="3" maxlength="40" autocomplete="off" required>
+              <label for="newAdminEmail">Admin Gmail address</label>
+              <input id="newAdminEmail" type="email" placeholder="admin@gmail.com" required>
+              <label for="newAdminPassword">Initial password · 8+ characters</label>
+              <input id="newAdminPassword" type="password" minlength="8" autocomplete="new-password" required>
+              <button class="admin-primary-btn" type="submit">Create administrator</button>
+            </form>
+            <p id="createAdminMessage" class="admin-message" aria-live="polite"></p>
+          </article>
+        </div>
+      </section>
+
+      <!-- USER MANAGEMENT -->
+      <section id="user-management" class="admin-content-section admin-section-anchor">
+        <div class="admin-section-heading">
+          <div>
+            <h2>User management</h2>
+            <p>Search accounts, apply filters, export results and manage account access.</p>
+          </div>
+          <button class="admin-secondary-btn" type="button" onclick="loadUsers(1)">↻ Refresh list</button>
+        </div>
+
+        <article class="admin-panel-card">
+          <div class="admin-filter-toolbar user-filter-toolbar">
+            <div class="admin-filter-field search-filter-field">
+              <label for="userSearch">Search users</label>
+              <input id="userSearch" type="search" placeholder="Search username or Gmail...">
+            </div>
+            <div class="admin-filter-field">
+              <label for="userAccountFilter">Account status</label>
+              <select id="userAccountFilter">
+                <option value="all">All accounts</option>
+                <option value="enabled">Enabled</option>
+                <option value="disabled">Disabled</option>
+              </select>
+            </div>
+            <div class="admin-filter-field">
+              <label for="userEmailFilter">Email verification</label>
+              <select id="userEmailFilter">
+                <option value="all">All emails</option>
+                <option value="verified">Verified</option>
+                <option value="unverified">Unverified</option>
+              </select>
+            </div>
+            <div class="admin-filter-field">
+              <label for="userSubscriptionFilter">Subscription</label>
+              <select id="userSubscriptionFilter">
+                <option value="all">All statuses</option>
+                <option value="active">Active</option>
+                <option value="expired">Expired</option>
+                <option value="inactive">Inactive</option>
+              </select>
+            </div>
+            <div class="admin-filter-field">
+              <label for="userPlanFilter">Plan</label>
+              <select id="userPlanFilter">
+                <option value="all">All plans</option>
+                <option value="starter">Starter</option>
+                <option value="basic">Basic</option>
+                <option value="standard">Standard</option>
+                <option value="premium">Premium</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="admin-filter-actions">
+            <button class="admin-secondary-btn" id="applyUserFilters" type="button">Apply filters</button>
+            <button class="admin-quiet-btn" id="resetUserFilters" type="button">Reset</button>
+            <button class="admin-primary-btn" id="exportUsersBtn" type="button">↓ Export CSV</button>
+          </div>
+
+          <div class="admin-table-meta">
+            <span id="userResultsMeta">Loading users...</span>
+            <span>10 users per page</span>
+          </div>
+
+          <div class="admin-table-wrap">
+            <table class="admin-table">
+              <thead>
+                <tr>
+                  <th>Username</th>
+                  <th>Gmail</th>
+                  <th>Email</th>
+                  <th>Account</th>
+                  <th>Plan</th>
+                  <th>Subscription</th>
+                  <th>Last login</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody id="usersTable">
+                <tr><td colspan="8" class="admin-empty">Loading users...</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="admin-pagination" id="userPagination" aria-label="User pages"></div>
+        </article>
+      </section>
+
+      <!-- ADMIN MANAGEMENT -->
+      <section id="admin-management" class="admin-content-section admin-section-anchor">
+        <div class="admin-section-heading">
+          <div><h2>Administrator management</h2><p>View administrator roles and account status.</p></div>
+          <button class="admin-secondary-btn" type="button" onclick="loadAdminData()">↻ Refresh list</button>
+        </div>
+        <article class="admin-panel-card">
+          <div class="admin-table-wrap">
+            <table class="admin-table">
+              <thead>
+                <tr>
+                  <th>Username</th><th>Gmail</th><th>Email</th><th>Role</th>
+                  <th>Account</th><th>Last login</th><th>Action</th>
+                </tr>
+              </thead>
+              <tbody id="adminsTable">
+                <tr><td colspan="7" class="admin-empty">Loading administrators...</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </article>
+      </section>
+
+      <!-- AUDIT LOG -->
+      <section id="audit-log" class="admin-content-section admin-section-anchor">
+        <div class="admin-section-heading">
+          <div>
+            <h2>Admin activity log</h2>
+            <p>Review account creation and account-status changes performed from this dashboard.</p>
+          </div>
+          <span class="admin-panel-tag">Audit trail</span>
+        </div>
+
+        <article class="admin-panel-card">
+          <div class="admin-filter-toolbar audit-filter-toolbar">
+            <div class="admin-filter-field">
+              <label for="auditActionFilter">Activity type</label>
+              <select id="auditActionFilter">
+                <option value="all">All activities</option>
+                <option value="user.created">User created</option>
+                <option value="admin.created">Admin created</option>
+                <option value="user.status_changed">User status changed</option>
+                <option value="admin.status_changed">Admin status changed</option>
+              </select>
+            </div>
+            <div class="admin-filter-field">
+              <label for="auditFrom">From</label>
+              <input id="auditFrom" type="date">
+            </div>
+            <div class="admin-filter-field">
+              <label for="auditTo">To</label>
+              <input id="auditTo" type="date">
+            </div>
+          </div>
+
+          <div class="admin-filter-actions">
+            <button class="admin-secondary-btn" id="applyAuditFilters" type="button">Apply filters</button>
+            <button class="admin-quiet-btn" id="resetAuditFilters" type="button">Reset</button>
+          </div>
+
+          <div class="admin-table-meta">
+            <span id="auditResultsMeta">Loading audit history...</span>
+            <span id="auditRetentionNote">Audit events are stored in data.json.</span>
+          </div>
+
+          <div class="admin-table-wrap">
+            <table class="admin-table audit-table">
+              <thead>
+                <tr>
+                  <th>Date &amp; time</th><th>Performed by</th><th>Activity</th>
+                  <th>Target</th><th>Details</th>
+                </tr>
+              </thead>
+              <tbody id="auditLogsTable">
+                <tr><td colspan="5" class="admin-empty">Loading audit history...</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="admin-pagination" id="auditPagination" aria-label="Audit log pages"></div>
+        </article>
+      </section>
+
+      <footer class="admin-footer">
+        Smart-Agro Administration- Developed By Nur Hossain Rhedoy.
+      </footer>
+    </main>
+  </div>
+
+<script>
+'use strict';
+
+if (localStorage.getItem('theme') === 'dark') {
+  document.documentElement.setAttribute('data-theme', 'dark');
+}
+
+const token = () => localStorage.getItem('token');
+
+const esc = value => String(value ?? '').replace(/[&<>"']/g, char => ({
+  '&': '&amp;',
+  '<': '&lt;',
+  '>': '&gt;',
+  '"': '&quot;',
+  "'": '&#39;'
+}[char]));
+
+const number = value => Number(value || 0).toLocaleString();
+
+let currentAdmin = null;
+let registrationChart = null;
+let subscriptionChart = null;
+let periodRegistrationChart = null;
+let loading = false;
+let userPage = 1;
+let auditPage = 1;
+let userSearchTimer = null;
+
+
+// ======================================================
+// API HELPERS
+// ======================================================
+
+async function api(url, method = 'GET', body) {
+  const response = await fetch(url, {
+    method,
+    headers: {
+      'Content-Type': 'application/json',
+      ...(token() ? { Authorization: 'Bearer ' + token() } : {})
+    },
+    body: body ? JSON.stringify(body) : undefined
+  });
+
+  const data = await response.json().catch(() => ({}));
+
+  if (response.status === 401) {
+    localStorage.removeItem('token');
+    location.href = 'index.html';
+    throw new Error('Your session has expired. Please log in again.');
+  }
+
+  if (!response.ok) {
+    const error = new Error(data.message || 'Request failed.');
+    error.status = response.status;
+    throw error;
+  }
+
+  return data;
+}
+
+function logoutAdmin() {
+  localStorage.removeItem('token');
+  location.href = 'index.html';
+}
+
+function niceDate(value) {
+  if (!value) return 'Never';
+
+  const date = new Date(value);
+
+  return Number.isNaN(date.getTime())
+    ? esc(value)
+    : date.toLocaleString();
+}
+
+function setMessage(id, message, isError = false) {
+  const element = document.getElementById(id);
+
+  if (!element) return;
+
+  element.textContent = message || '';
+  element.classList.toggle('is-error', Boolean(isError));
+}
+
+function queryString(values) {
+  const params = new URLSearchParams();
+
+  Object.entries(values).forEach(([key, value]) => {
+    if (value !== undefined && value !== null && value !== '') {
+      params.set(key, value);
+    }
+  });
+
+  return params.toString();
+}
+
+function localDateInput(date) {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const day = String(date.getDate()).padStart(2, '0');
+
+  return `${year}-${month}-${day}`;
+}
+
+
+// ======================================================
+// PHASE 1: CHARTS
+// ======================================================
+
+function renderRegistrationChart(items) {
+  const canvas = document.getElementById('registrationChart');
+
+  if (!canvas || typeof Chart === 'undefined') return;
+
+  if (registrationChart) registrationChart.destroy();
+
+  const labels = (items || []).map(item => item.month);
+  const values = (items || []).map(item => Number(item.count || 0));
+
+  registrationChart = new Chart(canvas, {
+    type: 'line',
+
+    data: {
+      labels,
+
+      datasets: [{
+        label: 'New users',
+        data: values,
+
+        borderColor: '#4f46e5',
+        backgroundColor: 'rgba(79,70,229,.12)',
+
+        fill: true,
+        tension: .35,
+        borderWidth: 2.5,
+        pointRadius: 4,
+        pointHoverRadius: 6
+      }]
+    },
+
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+
+      plugins: {
+        legend: { display: false }
+      },
+
+      scales: {
+        y: {
+          beginAtZero: true,
+          ticks: { precision: 0 },
+          grid: { color: 'rgba(148,163,184,.16)' }
+        },
+
+        x: {
+          grid: { display: false }
+        }
+      }
+    }
+  });
+}
+
+
+function renderSubscriptionChart(items) {
+  const canvas = document.getElementById('subscriptionChart');
+
+  if (!canvas || typeof Chart === 'undefined') return;
+
+  if (subscriptionChart) subscriptionChart.destroy();
+
+  const rows = items || [];
+
+  const labels = rows.length
+    ? rows.map(item => item.plan)
+    : ['No subscription data'];
+
+  const values = rows.length
+    ? rows.map(item => Number(item.count || 0))
+    : [1];
+
+  subscriptionChart = new Chart(canvas, {
+    type: 'doughnut',
+
+    data: {
+      labels,
+
+      datasets: [{
+        data: values,
+
+        backgroundColor: [
+          '#4f46e5',
+          '#2563eb',
+          '#8b5cf6',
+          '#0891b2',
+          '#f59e0b',
+          '#64748b'
+        ],
+
+        borderColor: '#ffffff',
+        borderWidth: 2,
+        hoverOffset: 5
+      }]
+    },
+
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      cutout: '68%',
+
+      plugins: {
+        legend: {
+          position: 'bottom',
+          labels: {
+            usePointStyle: true,
+            padding: 16
+          }
+        },
+
+        tooltip: {
+          enabled: rows.length > 0
+        }
+      }
+    }
+  });
+}
+
+
+function renderRecentRegistrations(items) {
+  const body = document.getElementById('recentRegistrationsTable');
+
+  body.innerHTML = (items || []).map(user => `
+    <tr>
+      <td><strong>${esc(user.username)}</strong></td>
+      <td>${esc(user.email || 'Not added')}</td>
+      <td>
+        <span class="admin-status ${user.emailVerified ? 'ok' : 'muted'}">
+          ${user.emailVerified ? 'Verified' : 'Pending'}
+        </span>
+      </td>
+      <td>${niceDate(user.createdAt)}</td>
+    </tr>
+  `).join('') || `
+    <tr>
+      <td colspan="4" class="admin-empty">No user registrations yet.</td>
+    </tr>
+  `;
+}
+
+
+function renderRecentAdminSignIns(items) {
+  const container = document.getElementById('recentAdminSignIns');
+
+  container.innerHTML = (items || []).map(admin => `
+    <div class="admin-signin-item">
+      <div class="admin-avatar small">
+        ${esc((admin.username || 'A').slice(0, 1).toUpperCase())}
+      </div>
+
+      <div class="admin-signin-copy">
+        <strong>${esc(admin.username)}</strong>
+        <small>
+          ${admin.isMainAdmin ? 'Main administrator' : 'Administrator'}
+          · ${esc(admin.email || 'Email not added')}
+        </small>
+      </div>
+
+      <time>${niceDate(admin.lastLoginAt)}</time>
+    </div>
+  `).join('') || `
+    <div class="admin-empty">No administrator sign-ins recorded yet.</div>
+  `;
+}
+
+
+// ======================================================
+// USER AND ADMIN TABLE RENDERING
+// ======================================================
+
+function renderUsers(users) {
+  const body = document.getElementById('usersTable');
+
+  body.innerHTML = (users || []).map(user => {
+    const active = user.isActive !== false;
+    const sub = user.subscription || {};
+
+    const emailStatus = user.emailVerified
+      ? '<span class="admin-status ok">Verified</span>'
+      : '<span class="admin-status muted">Unverified</span>';
+
+    const accountStatus = active
+      ? '<span class="admin-status ok">Enabled</span>'
+      : '<span class="admin-status danger">Disabled</span>';
+
+    const subscriptionStatus = user.subscriptionStatus || 'inactive';
+
+    const subscriptionLabel =
+      subscriptionStatus.charAt(0).toUpperCase() +
+      subscriptionStatus.slice(1);
+
+    const action = `
+      <button
+        class="admin-table-action ${active ? 'danger' : 'primary'} status-action"
+        type="button"
+        data-kind="user"
+        data-username="${esc(user.username)}"
+        data-active="${!active}">
+        ${active ? 'Disable' : 'Enable'}
+      </button>
+    `;
+
+    return `
+      <tr>
+        <td><strong>${esc(user.username)}</strong></td>
+        <td>${esc(user.email || 'Not added')}</td>
+        <td>${emailStatus}</td>
+        <td>${accountStatus}</td>
+        <td>${esc(sub.planName || 'No plan')}</td>
+        <td>
+          <span class="admin-status ${subscriptionStatus === 'active' ? 'ok' : 'muted'}">
+            ${esc(subscriptionLabel)}
+          </span>
+          <small class="admin-cell-note">
+            ${esc(sub.endDate || 'No end date')}
+          </small>
+        </td>
+        <td>${niceDate(user.lastLoginAt)}</td>
+        <td>${action}</td>
+      </tr>
+    `;
+  }).join('') || `
+    <tr>
+      <td colspan="8" class="admin-empty">No users match the current filters.</td>
+    </tr>
+  `;
+}
+
+
+function renderAdmins(admins) {
+  const body = document.getElementById('adminsTable');
+
+  body.innerHTML = (admins || []).map(admin => {
+    const active = admin.isActive;
+
+    const emailStatus = admin.emailVerified
+      ? '<span class="admin-status ok">Verified</span>'
+      : '<span class="admin-status muted">Unverified</span>';
+
+    const accountStatus = active
+      ? '<span class="admin-status ok">Enabled</span>'
+      : '<span class="admin-status danger">Disabled</span>';
+
+    const action = admin.isMainAdmin || !currentAdmin?.isMainAdmin
+      ? '<span class="admin-cell-note">Protected</span>'
+      : `
+        <button
+          class="admin-table-action ${active ? 'danger' : 'primary'} status-action"
+          type="button"
+          data-kind="admin"
+          data-username="${esc(admin.username)}"
+          data-active="${!active}">
+          ${active ? 'Disable' : 'Enable'}
+        </button>
+      `;
+
+    return `
+      <tr>
+        <td>
+          <strong>${esc(admin.username)}</strong>
+          ${admin.isMainAdmin ? '<small class="admin-cell-note">Main admin</small>' : ''}
+        </td>
+        <td>${esc(admin.email || 'Not added')}</td>
+        <td>${emailStatus}</td>
+        <td>${admin.isMainAdmin ? 'Main administrator' : 'Administrator'}</td>
+        <td>${accountStatus}</td>
+        <td>${niceDate(admin.lastLoginAt)}</td>
+        <td>${action}</td>
+      </tr>
+    `;
+  }).join('') || `
+    <tr>
+      <td colspan="7" class="admin-empty">No administrator accounts found.</td>
+    </tr>
+  `;
+}
+
+
+// ======================================================
+// PHASE 2: PAGINATION
+// ======================================================
+
+function renderPagination(containerId, page, totalPages, attribute) {
+  const container = document.getElementById(containerId);
+
+  if (!container) return;
+
+  if (totalPages <= 1) {
+    container.innerHTML = '';
+    return;
+  }
+
+  const start = Math.max(1, page - 2);
+  const end = Math.min(totalPages, page + 2);
+
+  let html = `
+    <button
+      type="button"
+      class="admin-page-btn"
+      data-${attribute}="${page - 1}"
+      ${page <= 1 ? 'disabled' : ''}>
+      Previous
+    </button>
+  `;
+
+  if (start > 1) {
+    html += `
+      <button type="button" class="admin-page-btn" data-${attribute}="1">1</button>
+      <span class="admin-page-ellipsis">…</span>
+    `;
+  }
+
+  for (let current = start; current <= end; current++) {
+    html += `
+      <button
+        type="button"
+        class="admin-page-btn ${current === page ? 'active' : ''}"
+        data-${attribute}="${current}"
+        ${current === page ? 'aria-current="page"' : ''}>
+        ${current}
+      </button>
+    `;
+  }
+
+  if (end < totalPages) {
+    html += `
+      <span class="admin-page-ellipsis">…</span>
+      <button
+        type="button"
+        class="admin-page-btn"
+        data-${attribute}="${totalPages}">
+        ${totalPages}
+      </button>
+    `;
+  }
+
+  html += `
+    <button
+      type="button"
+      class="admin-page-btn"
+      data-${attribute}="${page + 1}"
+      ${page >= totalPages ? 'disabled' : ''}>
+      Next
+    </button>
+  `;
+
+  container.innerHTML = html;
+}
+
+
+// ======================================================
+// PHASE 2: USER SEARCH, FILTERS AND PAGINATION
+// ======================================================
+
+function getUserFilters(page = userPage, limit = 10) {
+  return {
+    search: document.getElementById('userSearch').value.trim(),
+    status: document.getElementById('userAccountFilter').value,
+    email: document.getElementById('userEmailFilter').value,
+    subscription: document.getElementById('userSubscriptionFilter').value,
+    plan: document.getElementById('userPlanFilter').value,
+    page,
+    limit
+  };
+}
+
+
+async function loadUsers(page = 1) {
+  userPage = page;
+
+  const body = document.getElementById('usersTable');
+
+  body.innerHTML = `
+    <tr>
+      <td colspan="8" class="admin-empty">Loading users...</td>
+    </tr>
+  `;
+
+  try {
+    const result = await api(
+      '/api/admin/users/search?' + queryString(getUserFilters(page))
+    );
+
+    renderUsers(result.items || []);
+
+    userPage = result.page || 1;
+
+    document.getElementById('userResultsMeta').textContent =
+      `${number(result.total)} user(s) found · Page ${userPage} of ${result.totalPages || 1}`;
+
+    renderPagination(
+      'userPagination',
+      userPage,
+      result.totalPages || 1,
+      'user-page'
+    );
+
+  } catch (error) {
+    body.innerHTML = `
+      <tr>
+        <td colspan="8" class="admin-empty">${esc(error.message)}</td>
+      </tr>
+    `;
+
+    document.getElementById('userResultsMeta').textContent =
+      'Could not load users.';
+  }
+}
+
+
+// ======================================================
+// PHASE 2: DATE RANGE ANALYTICS
+// ======================================================
+
+function renderPeriodRegistrationChart(items) {
+  const canvas = document.getElementById('periodRegistrationChart');
+
+  if (!canvas || typeof Chart === 'undefined') return;
+
+  if (periodRegistrationChart) periodRegistrationChart.destroy();
+
+  periodRegistrationChart = new Chart(canvas, {
+    type: 'bar',
+
+    data: {
+      labels: (items || []).map(item => item.label),
+
+      datasets: [{
+        label: 'Registered users',
+
+        data: (items || []).map(
+          item => Number(item.count || 0)
+        ),
+
+        backgroundColor: 'rgba(79,70,229,.78)',
+        hoverBackgroundColor: '#3730a3',
+
+        borderRadius: 6,
+        maxBarThickness: 28
+      }]
+    },
+
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+
+      plugins: {
+        legend: { display: false }
+      },
+
+      scales: {
+        y: {
+          beginAtZero: true,
+          ticks: { precision: 0 },
+          grid: { color: 'rgba(148,163,184,.16)' }
+        },
+
+        x: {
+          grid: { display: false },
+          ticks: {
+            maxRotation: 0,
+            autoSkip: true,
+            maxTicksLimit: 12
+          }
+        }
+      }
+    }
+  });
+}
+
+
+async function loadAnalytics() {
+  const from = document.getElementById('analyticsFrom').value;
+  const to = document.getElementById('analyticsTo').value;
+
+  if (!from || !to) return;
+
+  if (from > to) {
+    setMessage(
+      'analyticsMessage',
+      'Start date must not be after end date.',
+      true
+    );
+    return;
+  }
+
+  setMessage('analyticsMessage', 'Updating analytics...');
+
+  try {
+    const result = await api(
+      '/api/admin/analytics?' + queryString({ from, to })
+    );
+
+    const summary = result.summary || {};
+
+    document.getElementById('rangeNewUsers').textContent =
+      number(summary.newUsers);
+
+    document.getElementById('rangeActiveUsers').textContent =
+      number(summary.enabledUsers);
+
+    document.getElementById('rangeVerifiedUsers').textContent =
+      number(summary.verifiedUsers);
+
+    document.getElementById('rangeDisabledUsers').textContent =
+      number(summary.disabledUsers);
+
+    document.getElementById('analyticsRangeLabel').textContent =
+      `${result.from} — ${result.to}`;
+
+    setMessage(
+      'analyticsMessage',
+      `Updated · ${result.days} day(s) · ${niceDate(result.generatedAt)}`
+    );
+
+    renderPeriodRegistrationChart(result.series || []);
+
+  } catch (error) {
+    setMessage('analyticsMessage', error.message, true);
+  }
+}
+
+
+// ======================================================
+// PHASE 2: ADMIN AUDIT LOG
+// ======================================================
+
+function auditActionLabel(action) {
+  const labels = {
+    'user.created': 'User created',
+    'admin.created': 'Admin created',
+    'user.status_changed': 'User status changed',
+    'admin.status_changed': 'Admin status changed'
+  };
+
+  return labels[action] || action || 'Activity';
+}
+
+
+function renderAuditLogs(items) {
+  const body = document.getElementById('auditLogsTable');
+
+  body.innerHTML = (items || []).map(log => `
+    <tr>
+      <td>${niceDate(log.createdAt)}</td>
+
+      <td>
+        <strong>${esc(log.actor || 'Unknown')}</strong>
+        <small class="admin-cell-note">${esc(log.actorRole || '')}</small>
+      </td>
+
+      <td>
+        <span class="admin-panel-tag">
+          ${esc(auditActionLabel(log.action))}
+        </span>
+      </td>
+
+      <td>${esc(log.target || '—')}</td>
+      <td>${esc(log.summary || '—')}</td>
+    </tr>
+  `).join('') || `
+    <tr>
+      <td colspan="5" class="admin-empty">
+        No audit events found. New admin actions will appear here.
+      </td>
+    </tr>
+  `;
+}
+
+
+async function loadAuditLogs(page = 1) {
+  auditPage = page;
+
+  const body = document.getElementById('auditLogsTable');
+
+  body.innerHTML = `
+    <tr>
+      <td colspan="5" class="admin-empty">Loading audit history...</td>
+    </tr>
+  `;
+
+  try {
+    const query = queryString({
+      action: document.getElementById('auditActionFilter').value,
+      from: document.getElementById('auditFrom').value,
+      to: document.getElementById('auditTo').value,
+      page,
+      limit: 15
+    });
+
+    const result = await api('/api/admin/audit-logs?' + query);
+
+    renderAuditLogs(result.items || []);
+
+    auditPage = result.page || 1;
+
+    document.getElementById('auditResultsMeta').textContent =
+      `${number(result.total)} event(s) · Page ${auditPage} of ${result.totalPages || 1}`;
+
+    document.getElementById('auditRetentionNote').textContent =
+      `Up to ${number(result.retentionLimit || 2000)} recent events retained.`;
+
+    renderPagination(
+      'auditPagination',
+      auditPage,
+      result.totalPages || 1,
+      'audit-page'
+    );
+
+  } catch (error) {
+    body.innerHTML = `
+      <tr>
+        <td colspan="5" class="admin-empty">${esc(error.message)}</td>
+      </tr>
+    `;
+  }
+}
+
+
+// ======================================================
+// PHASE 2: CSV EXPORT
+// ======================================================
+
+async function exportUsersCsv() {
+  const button = document.getElementById('exportUsersBtn');
+
+  button.disabled = true;
+  button.textContent = 'Preparing...';
+
+  try {
+    const allUsers = [];
+
+    let page = 1;
+    let totalPages = 1;
+
+    do {
+      const result = await api(
+        '/api/admin/users/search?' +
+        queryString(getUserFilters(page, 100))
+      );
+
+      allUsers.push(...(result.items || []));
+
+      totalPages = result.totalPages || 1;
+
+      page++;
+
+      if (page > 1000) {
+        throw new Error('Export stopped because the result set is too large.');
+      }
+
+    } while (page <= totalPages);
+
+
+    const columns = [
+      ['Username', user => user.username],
+      ['Email', user => user.email || ''],
+      ['Email verified', user => user.emailVerified ? 'Yes' : 'No'],
+      ['Account status', user => user.isActive ? 'Enabled' : 'Disabled'],
+      ['Plan', user => user.subscription?.planName || ''],
+      ['Subscription status', user => user.subscriptionStatus || 'inactive'],
+      ['Joined', user => user.createdAt || ''],
+      ['Last login', user => user.lastLoginAt || '']
+    ];
+
+    const cell = value => {
+      let text = String(value ?? '');
+
+      // Prevent spreadsheet formula injection from user-controlled text.
+      if (/^[=+@\-\t\r]/.test(text)) {
+        text = "'" + text;
+      }
+
+      return '"' + text.replace(/"/g, '""') + '"';
+    };
+
+    const csv = [
+      columns.map(column => cell(column[0])).join(','),
+
+      ...allUsers.map(user =>
+        columns.map(column => cell(column[1](user))).join(',')
+      )
+    ].join('\r\n');
+
+    const blob = new Blob(
+      ['\uFEFF' + csv],
+      { type: 'text/csv;charset=utf-8;' }
+    );
+
+    const url = URL.createObjectURL(blob);
+
+    const link = document.createElement('a');
+
+    link.href = url;
+
+    link.download =
+      `smart-agro-users-${localDateInput(new Date())}.csv`;
+
+    document.body.appendChild(link);
+
+    link.click();
+
+    link.remove();
+
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
+
+    document.getElementById('userResultsMeta').textContent =
+      `${number(allUsers.length)} user(s) exported.`;
+
+  } catch (error) {
+    alert('CSV export failed: ' + error.message);
+
+  } finally {
+    button.disabled = false;
+    button.textContent = '↓ Export CSV';
+  }
+}
+
+
+// ======================================================
+// PHASE 1 + PHASE 2: LOAD ALL DASHBOARD DATA
+// ======================================================
+
+async function loadAdminData() {
+  if (loading) return;
+
+  loading = true;
+
+  const refresh = document.getElementById('refreshBtn');
+
+  refresh.disabled = true;
+  refresh.textContent = 'Loading...';
+
+  try {
+    const [stats, admins] = await Promise.all([
+      api('/api/admin/stats'),
+      api('/api/admin/admins')
+    ]);
+
+    const statIds = [
+      'totalUsers',
+      'activeUsers',
+      'inactiveUsers',
+      'recentLoginUsers7d',
+      'totalAdmins',
+      'activeAdmins',
+      'totalAnimals',
+      'verifiedUsers',
+      'unverifiedUsers',
+      'subscriptionActive',
+      'subscriptionExpired',
+      'subscriptionInactive'
+    ];
+
+    for (const id of statIds) {
+      const element = document.getElementById(id);
+
+      if (element) {
+        element.textContent = number(stats[id]);
+      }
+    }
+
+    renderRegistrationChart(stats.registrationsByMonth || []);
+    renderSubscriptionChart(stats.subscriptionsByPlan || []);
+    renderRecentRegistrations(stats.recentRegistrations || []);
+    renderRecentAdminSignIns(stats.recentAdminSignIns || []);
+    renderAdmins(admins);
+
+    document.getElementById('updatedAt').textContent =
+      `Last refreshed: ${niceDate(stats.generatedAt)} · Statistics are calculated from data.json.`;
+
+    await Promise.allSettled([
+      loadUsers(userPage),
+      loadAuditLogs(auditPage),
+      loadAnalytics()
+    ]);
+
+  } catch (error) {
+    console.error('Admin dashboard loading error:', error);
+
+    document.getElementById('updatedAt').textContent =
+      error.message;
+
+  } finally {
+    loading = false;
+
+    refresh.disabled = false;
+    refresh.textContent = '↻ Refresh data';
+  }
+}
+
+
+// ======================================================
+// ACCOUNT STATUS CHANGES
+// ======================================================
+
+async function setAccountStatus(kind, username, isActive) {
+  const action = isActive ? 'enable' : 'disable';
+
+  if (!confirm(`Are you sure you want to ${action} ${username}?`)) {
+    return;
+  }
+
+  try {
+    const url = kind === 'admin'
+      ? '/api/admin/admins/' + encodeURIComponent(username) + '/status'
+      : '/api/admin/users/' + encodeURIComponent(username) + '/status';
+
+    await api(url, 'PATCH', { isActive });
+
+    await loadAdminData();
+
+  } catch (error) {
+    alert(error.message);
+  }
+}
+
+
+document.getElementById('usersTable').addEventListener('click', event => {
+  const button = event.target.closest('button.status-action');
+
+  if (button) {
+    setAccountStatus(
+      button.dataset.kind,
+      button.dataset.username,
+      button.dataset.active === 'true'
+    );
+  }
+});
+
+
+document.getElementById('adminsTable').addEventListener('click', event => {
+  const button = event.target.closest('button.status-action');
+
+  if (button) {
+    setAccountStatus(
+      button.dataset.kind,
+      button.dataset.username,
+      button.dataset.active === 'true'
+    );
+  }
+});
+
+
+document.getElementById('refreshBtn').addEventListener(
+  'click',
+  loadAdminData
+);
+
+
+// ======================================================
+// USER SEARCH AND FILTER EVENTS
+// ======================================================
+
+document.getElementById('applyUserFilters').addEventListener(
+  'click',
+  () => loadUsers(1)
+);
+
+document.getElementById('resetUserFilters').addEventListener('click', () => {
+  document.getElementById('userSearch').value = '';
+  document.getElementById('userAccountFilter').value = 'all';
+  document.getElementById('userEmailFilter').value = 'all';
+  document.getElementById('userSubscriptionFilter').value = 'all';
+  document.getElementById('userPlanFilter').value = 'all';
+
+  loadUsers(1);
+});
+
+
+[
+  'userAccountFilter',
+  'userEmailFilter',
+  'userSubscriptionFilter',
+  'userPlanFilter'
+].forEach(id => {
+  document.getElementById(id).addEventListener(
+    'change',
+    () => loadUsers(1)
+  );
+});
+
+
+document.getElementById('userSearch').addEventListener('input', () => {
+  clearTimeout(userSearchTimer);
+
+  userSearchTimer = setTimeout(() => loadUsers(1), 300);
+});
+
+
+document.getElementById('userSearch').addEventListener('keydown', event => {
+  if (event.key === 'Enter') {
+    clearTimeout(userSearchTimer);
+    loadUsers(1);
+  }
+});
+
+
+document.getElementById('exportUsersBtn').addEventListener(
+  'click',
+  exportUsersCsv
+);
+
+
+document.getElementById('userPagination').addEventListener('click', event => {
+  const button = event.target.closest('[data-user-page]');
+
+  if (button && !button.disabled) {
+    loadUsers(Number(button.dataset.userPage));
+  }
+});
+
+
+// ======================================================
+// ANALYTICS EVENTS
+// ======================================================
+
+document.getElementById('analyticsFilterForm').addEventListener(
+  'submit',
+  event => {
+    event.preventDefault();
+    loadAnalytics();
+  }
+);
+
+
+document.getElementById('analyticsLast30').addEventListener('click', () => {
+  const to = new Date();
+  const from = new Date();
+
+  from.setDate(from.getDate() - 29);
+
+  document.getElementById('analyticsFrom').value =
+    localDateInput(from);
+
+  document.getElementById('analyticsTo').value =
+    localDateInput(to);
+
+  loadAnalytics();
+});
+
+
+// ======================================================
+// AUDIT LOG EVENTS
+// ======================================================
+
+document.getElementById('applyAuditFilters').addEventListener(
+  'click',
+  () => loadAuditLogs(1)
+);
+
+
+document.getElementById('resetAuditFilters').addEventListener('click', () => {
+  document.getElementById('auditActionFilter').value = 'all';
+  document.getElementById('auditFrom').value = '';
+  document.getElementById('auditTo').value = '';
+
+  loadAuditLogs(1);
+});
+
+
+document.getElementById('auditPagination').addEventListener('click', event => {
+  const button = event.target.closest('[data-audit-page]');
+
+  if (button && !button.disabled) {
+    loadAuditLogs(Number(button.dataset.auditPage));
+  }
+});
+
+
+// ======================================================
+// CREATE USER / CREATE ADMIN
+// ======================================================
+
+document.getElementById('createUserForm').addEventListener('submit', async event => {
+  event.preventDefault();
+
+  const button = event.submitter;
+
+  button.disabled = true;
+
+  setMessage(
+    'createMessage',
+    'Creating account and sending verification email...'
+  );
+
+  try {
+    const result = await api('/api/admin/users', 'POST', {
+      username: document.getElementById('newUsername').value,
+      email: document.getElementById('newUserEmail').value,
+      password: document.getElementById('newPassword').value
+    });
+
+    setMessage(
+      'createMessage',
+      `${result.message} ${result.email}`
+    );
+
+    event.target.reset();
+
+    await loadAdminData();
+
+  } catch (error) {
+    setMessage('createMessage', error.message, true);
+
+  } finally {
+    button.disabled = false;
+  }
+});
+
+
+document.getElementById('createAdminForm').addEventListener('submit', async event => {
+  event.preventDefault();
+
+  const button = event.submitter;
+
+  button.disabled = true;
+
+  setMessage(
+    'createAdminMessage',
+    'Creating administrator and sending verification email...'
+  );
+
+  try {
+    const result = await api('/api/admin/admins', 'POST', {
+      username: document.getElementById('newAdminUsername').value,
+      email: document.getElementById('newAdminEmail').value,
+      password: document.getElementById('newAdminPassword').value
+    });
+
+    setMessage(
+      'createAdminMessage',
+      `${result.message} ${result.email}`
+    );
+
+    event.target.reset();
+
+    await loadAdminData();
+
+  } catch (error) {
+    setMessage('createAdminMessage', error.message, true);
+
+  } finally {
+    button.disabled = false;
+  }
+});
+
+
+// ======================================================
+// ADMIN EMAIL VERIFICATION
+// ======================================================
+
+document.getElementById('adminEmailForm').addEventListener('submit', async event => {
+  event.preventDefault();
+
+  try {
+    const result = await api(
+      '/api/auth/email/request-verification',
+      'POST',
+      {
+        email: document.getElementById('adminEmail').value
+      }
+    );
+
+    setMessage('adminEmailStatus', result.message);
+
+    document.getElementById('adminEmailVerifyForm').classList.remove('hidden');
+
+  } catch (error) {
+    setMessage('adminEmailStatus', error.message, true);
+  }
+});
+
+
+document.getElementById('adminEmailVerifyForm').addEventListener('submit', async event => {
+  event.preventDefault();
+
+  try {
+    const result = await api(
+      '/api/auth/email/verify',
+      'POST',
+      {
+        code: document.getElementById('adminEmailOtp').value
+      }
+    );
+
+    setMessage('adminEmailStatus', result.message);
+
+    document.getElementById('adminEmailVerifyForm').classList.add('hidden');
+
+    currentAdmin.email = result.email;
+    currentAdmin.emailVerified = true;
+
+  } catch (error) {
+    setMessage('adminEmailStatus', error.message, true);
+  }
+});
+
+
+// ======================================================
+// THEME TOGGLE
+// ======================================================
+
+document.getElementById('themeToggle').addEventListener('click', () => {
+  const isDark =
+    document.documentElement.getAttribute('data-theme') === 'dark';
+
+  const next = isDark ? 'light' : 'dark';
+
+  document.documentElement.setAttribute('data-theme', next);
+
+  localStorage.setItem('theme', next);
+
+  document.getElementById('themeToggle').textContent =
+    next === 'dark' ? '☀' : '☾';
+});
+
+
+// ======================================================
+// ACTIVE NAVIGATION
+// ======================================================
+
+document.querySelectorAll('.admin-nav a').forEach(link => {
+  link.addEventListener('click', () => {
+    document.querySelectorAll('.admin-nav a').forEach(item => {
+      item.classList.remove('active');
+    });
+
+    link.classList.add('active');
+  });
+});
+
+
+// ======================================================
+// INITIALIZE DASHBOARD
+// ======================================================
+
+(async function initializeAdminDashboard() {
+  try {
+    currentAdmin = await api('/api/auth/me');
+
+    if (currentAdmin.role !== 'admin') {
+      location.href = 'index.html';
+      return;
+    }
+
+    const name = currentAdmin.username || 'Administrator';
+
+    document.getElementById('welcomeText').textContent =
+      `Welcome back, ${name}. Here is the current platform overview.`;
+
+    const heroName = document.getElementById('heroAdminName');
+
+    if (heroName) heroName.textContent = name;
+
+    const heroToday = document.getElementById('heroToday');
+
+    if (heroToday) {
+      heroToday.textContent = new Date().toLocaleDateString(undefined, {
+        weekday: 'long',
+        month: 'short',
+        day: 'numeric',
+        year: 'numeric'
+      });
+    }
+
+    document.getElementById('sidebarUsername').textContent = name;
+
+    document.getElementById('sidebarAvatar').textContent =
+      name.slice(0, 1).toUpperCase();
+
+    document.getElementById('sidebarRole').textContent =
+      currentAdmin.isMainAdmin
+        ? 'Main administrator'
+        : 'Administrator';
+
+    if (currentAdmin.isMainAdmin) {
+      document.getElementById('createAdminSection').classList.remove('hidden');
+      document.getElementById('farmWorkspaceBtn').hidden = false;
+    }
+
+    if (currentAdmin.email) {
+      document.getElementById('adminEmail').value = currentAdmin.email;
+    }
+
+    setMessage(
+      'adminEmailStatus',
+      currentAdmin.emailVerified
+        ? `Verified Gmail: ${currentAdmin.email}`
+        : 'Gmail is not verified yet. Add an address and verify it to receive account emails.'
+    );
+
+    document.getElementById('themeToggle').textContent =
+      document.documentElement.getAttribute('data-theme') === 'dark'
+        ? '☀'
+        : '☾';
+
+    const analyticsTo = new Date();
+    const analyticsFrom = new Date();
+
+    analyticsFrom.setDate(analyticsFrom.getDate() - 29);
+
+    document.getElementById('analyticsFrom').value =
+      localDateInput(analyticsFrom);
+
+    document.getElementById('analyticsTo').value =
+      localDateInput(analyticsTo);
+
+    await loadAdminData();
+
+  } catch (error) {
+    console.error('Admin authentication failed:', error);
+
+    localStorage.removeItem('token');
+
+    location.href = 'index.html';
+  }
+})();
+</script>
+</body>
+</html>

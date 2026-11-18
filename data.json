@@ -1,0 +1,59 @@
+{
+  "users": [
+    {
+      "username": "Rhedoy",
+      "password": "$2b$12$.qtg99v9yR4Gz2Cf2ZeI..5CkY1iWfmHgL1EtJbgUPo4Xn309WX6e",
+      "recoveryHash": "$2b$10$dAiDOMtFMhsi/WMZGmUCOuVKj50wxyaoOlB1rFRvJuq/Vtd7BnvqG",
+      "role": "admin",
+      "isActive": true,
+      "createdAt": "2026-11-15T06:49:45.088Z",
+      "lastLoginAt": "2026-11-18T12:28:26.830Z",
+      "isMainAdmin": true,
+      "emailVerified": false,
+      "subscription": null
+    },
+    {
+      "username": "tony",
+      "email": "rhedoyrhedoy5@gmail.com",
+      "emailVerified": true,
+      "password": "$2b$12$XROaoyt9ylp8kv3CIe0NcuGRcKKBiDt3BpAib/Cdm7XxXvRh40MM6",
+      "role": "user",
+      "isMainAdmin": false,
+      "isActive": true,
+      "createdAt": "2026-11-15T16:00:34.726Z",
+      "lastLoginAt": "2026-11-18T12:30:52.966Z",
+      "subscription": {
+        "planCode": "standard",
+        "planName": "Standard",
+        "status": "active",
+        "startDate": "2026-11-16",
+        "endDate": "2027-02-14",
+        "price": 1299,
+        "paymentStatus": "awaiting_payment"
+      },
+      "lastFarmAlertEmailDate": "2026-11-17",
+      "lastFarmAlertEmailAt": "2026-11-16T19:30:53.252Z",
+      "profileName": "Ashrafi",
+      "farmName": "আমার বাপের খামার",
+      "farmLocation": "dhaka",
+      "profileUpdatedAt": "2026-11-17T09:44:58.609Z"
+    },
+    {
+      "username": "Nur",
+      "email": "nhrhedoy2001@gmail.com",
+      "emailVerified": true,
+      "password": "$2b$12$4xpa0iR5tuTWzY///RWTf.dRFHFY7Tfvr.552n8JpeNNvUpLGYaUi",
+      "role": "admin",
+      "isMainAdmin": false,
+      "isActive": true,
+      "createdAt": "2026-11-15T16:10:11.044Z",
+      "lastLoginAt": "2026-11-16T20:10:40.984Z",
+      "subscription": null
+    }
+  ],
+  "animals": [],
+  "system": {
+    "mainAdminConfigured": true,
+    "mainAdminConfiguredAt": "2026-11-15T06:49:45.443Z"
+  }
+}
